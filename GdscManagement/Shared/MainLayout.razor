@@ -1,20 +1,42 @@
-﻿@inherits LayoutComponentBase
+﻿@using GdscRecruitment.Common.Shared
+@inherits LayoutComponentBase
 
-<PageTitle>GdscManagement</PageTitle>
+<PageTitle>GDSC Management</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+<MudThemeProvider Theme="Theme.Get2()"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay/>
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<MudLayout>
+    <AppBar ToggleDrawer="ToggleDrawer"></AppBar>
 
-        <article class="content px-4">
+    <MudDrawer @onmouseenter="OpenDrawer" @onmouseleave="CloseDrawer" Anchor="Anchor.Start" ClipMode="DrawerClipMode.Always" @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini">
+        <NavMenu></NavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-16 pt-16">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _open;
+
+    private void OpenDrawer()
+    {
+        _open = true;
+    }
+
+    private void CloseDrawer()
+    {
+        _open = false;
+    }
+
+    private void ToggleDrawer()
+    {
+        _open = !_open;
+    }
+
+}

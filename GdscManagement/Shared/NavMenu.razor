@@ -1,40 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">GdscManagement</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿<MudNavMenu Color="Color.Primary" Margin="Margin.Dense" Rounded="true" Class="mud-width-full" Bordered="true">
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="fas fa-house" IconColor="Color.Success">Home</MudNavLink>
+    <MudNavLink Href="/examples" Icon="fas fa-server" IconColor="Color.Primary">Examples</MudNavLink>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-}
+    <MudNavGroup Title="Settings" Icon="fas fa-cogs" IconColor="Color.Primary">
+        <MudNavLink Href="/users" Icon="fas fa-users" IconColor="Color.Primary">Users</MudNavLink>
+        <MudNavLink Href="/security" Icon="fas fa-user-shield" IconColor="Color.Info">Security</MudNavLink>
+    </MudNavGroup>
+</MudNavMenu>

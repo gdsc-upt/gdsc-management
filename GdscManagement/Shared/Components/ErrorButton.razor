@@ -1,0 +1,29 @@
+<MudTooltip Color="Color.Error" Arrow="true" Text="@Tooltip">
+    <MudButton
+        Disabled="Disabled"
+        Variant="Variant.Outlined"
+        IconColor="Color.Error"
+        Color="Color.Error"
+        StartIcon="@StartIcon"
+        DisableElevation="true">
+        @Text
+    </MudButton>
+</MudTooltip>
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; } = "Delete";
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? Tooltip { get; set; }
+
+    [Parameter]
+    public string? Icon { get; set; }
+
+    private string StartIcon => Icon is not null ? "fa-solid " + Icon : "";
+
+}

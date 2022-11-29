@@ -1,0 +1,28 @@
+<MudAppBar Elevation="1" Class="d-flex">
+    <MudGrid>
+        <MudItem xs="1" sm="3">
+            <MudPaper Elevation="0" class="mud-width-full">
+                <MudIconButton OnClick="ToggleDrawer" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"/>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="8" sm="6">
+            <MudPaper Elevation="0" class="mud-width-full d-flex justify-center">
+                <MudNavLink Href="/" Match="NavLinkMatch.All" Class="d-flex flex-column width-auto">
+                    <MudText Typo="Typo.h6" Color="Color.Success" Class="text-center">GDSC Management</MudText>
+                </MudNavLink>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="3" sm="3">
+            <MudPaper Elevation="0" class="mud-width-full d-flex justify-end">
+                <LoginDisplay/>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudAppBar>
+
+@code {
+
+    [Parameter]
+    public EventCallback ToggleDrawer { get; set; }
+
+}
