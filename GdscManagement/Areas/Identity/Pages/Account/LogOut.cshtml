@@ -1,0 +1,15 @@
+﻿@page
+@using GdscManagement.Features.Users.Models
+@using Microsoft.AspNetCore.Identity
+@attribute [IgnoreAntiforgeryToken]
+@inject SignInManager<User> SignInManager
+
+@functions {
+
+    public async Task<IActionResult> OnGet()
+    {
+        await SignInManager.SignOutAsync();
+        return Redirect("~/");
+    }
+
+}

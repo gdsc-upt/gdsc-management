@@ -1,0 +1,17 @@
+{
+  "DetailedErrors": true,
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "Default": "Host=;Port=;Database=;Username=;Password="
+  },
+  "Google": {
+    "ClientId": "",
+    "ClientSecret": "",
+    "CallbackPath": "/signin-google"
+  }
+}

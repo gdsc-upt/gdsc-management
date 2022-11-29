@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-GdscManagement-DF6316F2-E90F-4F90-9C37-05314C8DF4EA</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0" />
+        <PackageReference Include="MudBlazor" Version="6.1.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Users" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\FONT-LICENSE" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\css\open-iconic-bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.eot" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.otf" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\ICON-LICENSE" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\README.md" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Account\ExternalLogin.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Account\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Account\LogOut.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\LogOut.cshtml" />
+    </ItemGroup>
+
+</Project>

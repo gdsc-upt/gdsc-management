@@ -1,0 +1,11 @@
+.full-width {
+    width: 100%;
+}
+
+.width-auto {
+    width: auto !important;
+}
+
+.text-center {
+    text-align: center;
+}
