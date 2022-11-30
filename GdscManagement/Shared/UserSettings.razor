@@ -2,17 +2,49 @@
 @inherits BaseComponent
 @inject PreferencesService PreferencesService
 
-<MudTooltip Text="@(PreferencesService.IsDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme")">
-    <MudIconButton Icon="@(PreferencesService.IsDarkMode ? "fa-solid fa-sun" : "fa-solid fa-moon")" Color="Color.Info" OnClick="PreferencesService.ToggleDarkMode"/>
-</MudTooltip>
+<MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudChip Size="Size.Large" Class="pa-0" Color="Color.Primary" Variant="Variant.Filled">
+            <MudAvatar
+                Variant="Variant.Outlined"
+                Color="Color.Tertiary"
+                Style="width: 27px; height: 27px"
+                Image="@User?.Avatar"
+                Elevation="25"
+                Class="ml-3"
+                Alt="@User?.ToString()"
+                referrerpolicy="no-referrer"/>
 
-<MudButton Color="Color.Error" Variant="Variant.Outlined" Class="mr-3" StartIcon="fa-sharp fa-solid fa-person-through-window" Href="Identity/Account/LogOut">Log out</MudButton>
+            <MudTooltip Text="Open user menu">
+                <MudIconButton
+                    Icon="fa-solid fa-gear"
+                    Class="spin spin-on-hover"
+                    Size="Size.Medium"
+                    Color="Color.Success"/>
+            </MudTooltip>
+        </MudChip>
+    </ActivatorContent>
 
-<MudButton Color="Color.Primary" Variant="Variant.Outlined" Href="Identity/Account/Manage/Index">
-    Hello, @User?.ToString()!
+    <ChildContent>
+        <MudMenuItem
+            OnClick="PreferencesService.ToggleDarkMode"
+            IconColor="Color.Primary"
+            Icon="@(PreferencesService.IsDarkMode ? "fa-solid fa-sun" : "fa-solid fa-moon")">
+            @(PreferencesService.IsDarkMode ? "Light Mode" : "Dark Mode")
+        </MudMenuItem>
 
-    @if (User?.Avatar is not null)
-    {
-        <MudAvatar Variant="Variant.Outlined" Color="Color.Tertiary" Style="width: 27px; height: 27px" Image="@User.Avatar" Elevation="25" Class="ml-3" Alt="@User.ToString()" referrerpolicy="no-referrer"/>
-    }
-</MudButton>
+        <MudMenuItem
+            IconColor="Color.Primary"
+            Icon="fa-solid fa-id-card"
+            Href="Identity/Account/Manage/Index">
+            Profile
+        </MudMenuItem>
+
+        <MudMenuItem
+            Href="Identity/Account/LogOut"
+            IconColor="Color.Error"
+            Icon="fa-solid fa-person-through-window">
+            Log out
+        </MudMenuItem>
+    </ChildContent>
+</MudMenu>

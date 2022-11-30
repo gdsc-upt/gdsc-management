@@ -1,7 +1,7 @@
 @using GdscManagement.Utilities
 <MudAppBar Elevation="1" Class="d-flex">
     <MudGrid>
-        <MudItem xs="1" sm="3">
+        <MudItem xs="3" sm="4" Class="d-flex">
             <MudIconButton
                 Class="d-flex d-sm-none"
                 OnClick="ToggleDrawer"
@@ -10,7 +10,7 @@
                 Edge="Edge.Start"/>
         </MudItem>
 
-        <MudItem xs="8" sm="6" Class="d-flex justify-center">
+        <MudItem xs="6" sm="4" Class="d-flex justify-center">
             <MudNavLink
                 Href="/"
                 Icon="@GdscIcons.Logo"
@@ -26,7 +26,7 @@
             </MudNavLink>
         </MudItem>
 
-        <MudItem xs="3" sm="3" Class="d-flex justify-end">
+        <MudItem xs="3" sm="4" Class="d-flex justify-end">
             <UserSettings/>
         </MudItem>
     </MudGrid>

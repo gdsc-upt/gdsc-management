@@ -31,7 +31,7 @@ public abstract class BaseComponent : OwningComponentBase
     private UserManager<User>? _userManager;
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
-    protected User User { get; private set; } = null!;
+    protected User? User { get; private set; }
     protected bool IsAuthenticated { get; private set; }
     protected bool IsAdmin { get; private set; }
 
