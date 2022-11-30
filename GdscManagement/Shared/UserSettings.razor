@@ -9,9 +9,9 @@
 <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="mr-3" StartIcon="fa-sharp fa-solid fa-person-through-window" Href="Identity/Account/LogOut">Log out</MudButton>
 
 <MudButton Color="Color.Primary" Variant="Variant.Outlined" Href="Identity/Account/Manage/Index">
-    Hello, @User.ToString()!
+    Hello, @User?.ToString()!
 
-    @if (User.Avatar is not null)
+    @if (User?.Avatar is not null)
     {
         <MudAvatar Variant="Variant.Outlined" Color="Color.Tertiary" Style="width: 27px; height: 27px" Image="@User.Avatar" Elevation="25" Class="ml-3" Alt="@User.ToString()" referrerpolicy="no-referrer"/>
     }
