@@ -1,10 +1,12 @@
 using System.Security.Claims;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using GdscManagement.Areas.Identity;
 using GdscManagement.Data;
 using GdscManagement.Data.Repository;
 using GdscManagement.Features.Users.Models;
+using GdscManagement.Services;
 using GdscManagement.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -32,14 +34,18 @@ services.AddMudServices(config =>
     config.SnackbarConfiguration.VisibleStateDuration = 5000;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
+services.AddBlazoredLocalStorage();
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<User>>();
 services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 services.AddScoped(typeof(ViewModelHelper<>));
+services.AddScoped<LayoutService>();
 
 services.AddAuthentication().AddGoogle(options =>
 {
-    options.ClientId = configuration["Google:ClientId"] ?? throw new InvalidOperationException("Google CLient ID not found.");
-    options.ClientSecret = configuration["Google:ClientSecret"] ?? throw new InvalidOperationException("Google Client Secret not found.");
+    options.ClientId = configuration["Google:ClientId"] ??
+                       throw new InvalidOperationException("Google CLient ID not found.");
+    options.ClientSecret = configuration["Google:ClientSecret"] ??
+                           throw new InvalidOperationException("Google Client Secret not found.");
     options.ClaimActions.MapJsonKey(CustomClaimTypes.Picture, "picture", "url");
     options.ClaimActions.MapJsonKey(CustomClaimTypes.EmailVerified, "verified_email", "bool");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name", "string");

@@ -1,42 +1,31 @@
-﻿@using GdscRecruitment.Common.Shared
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 <PageTitle>GDSC Management</PageTitle>
 
-<MudThemeProvider Theme="Theme.Get2()"/>
+<ThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <AppBar ToggleDrawer="ToggleDrawer"></AppBar>
+    <AuthorizeView>
+        <Authorized>
+            @code {
+                private Drawer? _drawer;
+            }
 
-    <MudDrawer @onmouseenter="OpenDrawer" @onmouseleave="CloseDrawer" Anchor="Anchor.Start" ClipMode="DrawerClipMode.Always" @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini">
-        <NavMenu></NavMenu>
-    </MudDrawer>
+            <AppBar ToggleDrawer="() => _drawer.ToggleDrawer()"></AppBar>
 
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-16 pt-16">
-            @Body
-        </MudContainer>
-    </MudMainContent>
+            <Drawer @ref="_drawer"/>
+
+            <MudMainContent>
+                <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-16 pt-16">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </Authorized>
+
+        <NotAuthorized>
+            <LoginView></LoginView>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudLayout>
-
-@code {
-    private bool _open;
-
-    private void OpenDrawer()
-    {
-        _open = true;
-    }
-
-    private void CloseDrawer()
-    {
-        _open = false;
-    }
-
-    private void ToggleDrawer()
-    {
-        _open = !_open;
-    }
-
-}

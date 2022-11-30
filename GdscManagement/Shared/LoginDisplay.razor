@@ -1,7 +1,13 @@
-﻿@inherits BaseComponent
+﻿@using GdscManagement.Services
+@inherits BaseComponent
+@inject LayoutService LayoutService
 
 <AuthorizeView>
     <Authorized>
+        <MudTooltip Duration="1000" Text="@(LayoutService.IsDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme")">
+            <MudIconButton Icon="@(LayoutService.IsDarkMode ? @Icons.Rounded.LightMode : @Icons.Material.Outlined.DarkMode)" Color="Color.Inherit" OnClick="ToggleDarkMode"/>
+        </MudTooltip>
+
         <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="mr-3" StartIcon="fa-sharp fa-solid fa-person-through-window" Href="Identity/Account/LogOut">Log out</MudButton>
 
         <MudButton Color="Color.Primary" Variant="Variant.Outlined" Href="Identity/Account/Manage/Index">
@@ -18,3 +24,11 @@
         <MudButton Color="Color.Success" IconColor="Color.Success" Variant="Variant.Outlined" Class="mr-3" StartIcon="fa-sharp fa-solid fa-right-to-bracket" Href="Identity/Account/ExternalLogin">Log in</MudButton>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    private async void ToggleDarkMode()
+    {
+        await LayoutService.ToggleDarkMode();
+        StateHasChanged();
+    }
+}

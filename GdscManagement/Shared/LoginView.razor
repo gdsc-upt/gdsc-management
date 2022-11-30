@@ -1,0 +1,25 @@
+<PageTitle>Login to GDSC Management</PageTitle>
+
+<MudPaper Class="d-flex align-center" Height="100vh" Width="100%">
+    <MudContainer MaxWidth="MaxWidth.Medium">
+        <MudPaper Elevation="3" Height="50vh" Width="100%" Class="d-flex flex-column">
+            <MudSpacer/>
+
+            <MudText Typo="Typo.h4" Color="Color.Primary" Class="text-center">Welcome to GDSC Management App!</MudText>
+
+            <MudPaper Elevation="0" Class="flex-grow-1 text-center d-flex justify-center align-center">
+                <MudText Color="Color.Info">You need to login with Google to access this platform</MudText>
+            </MudPaper>
+
+            <MudPaper Elevation="0" Class="d-flex justify-center">
+                <MudButton Class="mud-primary-text" Color="Color.Success" IconColor="Color.Primary" Variant="Variant.Filled" StartIcon="fa-solid fa-right-to-bracket" Href="Identity/Account/ExternalLogin">Log in</MudButton>
+            </MudPaper>
+
+            <MudSpacer/>
+        </MudPaper>
+    </MudContainer>
+</MudPaper>
+
+@code {
+
+}

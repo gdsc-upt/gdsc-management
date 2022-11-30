@@ -1,0 +1,24 @@
+<MudDrawer @onmouseenter="OpenDrawer" @onmouseleave="CloseDrawer" Anchor="Anchor.Start" ClipMode="DrawerClipMode.Always" @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini">
+    <NavMenu></NavMenu>
+</MudDrawer>
+
+@code {
+    private bool _open;
+
+    private void OpenDrawer()
+    {
+        _open = true;
+    }
+
+    private void CloseDrawer()
+    {
+        _open = false;
+    }
+
+    public void ToggleDrawer()
+    {
+        _open = !_open;
+        StateHasChanged();
+    }
+
+}
