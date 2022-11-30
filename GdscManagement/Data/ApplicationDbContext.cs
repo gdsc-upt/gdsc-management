@@ -1,4 +1,4 @@
-﻿using GdscManagement.Features.Users.Models;
+﻿using GdscManagement.Common.Features.Users.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

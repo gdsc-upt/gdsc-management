@@ -1,4 +1,4 @@
-namespace GdscRecruitment.Common.Features.Base;
+namespace GdscManagement.Common.Features.Base;
 
 public abstract class Model : IModel
 {

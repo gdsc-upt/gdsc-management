@@ -6,21 +6,20 @@ namespace GdscManagement.API;
 
 public static class Startup
 {
-    public static IServiceCollection AddAPI(this IServiceCollection services)
+    private static readonly OpenApiInfo SwaggerInfo = new() { Title = "Gdsc Management API", Version = "v1" };
+
+    public static IServiceCollection AddApi(this IServiceCollection services)
     {
         services.AddControllers();
-        services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo {Title = "Gdsc Management API", Version = "v1"}));
-
+        services.AddSwaggerGen(options => options.SwaggerDoc("v1", SwaggerInfo));
+        services.AddAutoMapper(typeof(ApiMappingProfiles));
         return services;
     }
 
-    public static IApplicationBuilder UseAPI(this IApplicationBuilder app)
+    public static IApplicationBuilder UseApi(this IApplicationBuilder app)
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        });
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"); });
 
         return app;
     }

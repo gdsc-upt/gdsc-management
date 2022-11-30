@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using GdscRecruitment.Common.Features.Base;
+using GdscManagement.Common.Features.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace GdscManagement.Data.Repository;
+namespace GdscManagement.Common.Repository;
 
 public interface IRepository<T> where T : class, IModel
 {

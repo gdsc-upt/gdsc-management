@@ -1,5 +1,5 @@
 using Blazored.LocalStorage;
-using GdscRecruitment.Common.Shared;
+using GdscManagement.Shared;
 using MudBlazor;
 
 namespace GdscManagement.Services;
@@ -9,6 +9,7 @@ public class UserPreferences
     public bool IsDarkMode { get; set; }
 }
 
+// TODO: Add multiple themes and a theme selector
 public class PreferencesService
 {
     private UserPreferences _preferences = new();

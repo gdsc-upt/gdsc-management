@@ -1,4 +1,4 @@
-namespace GdscManagement.Utilities;
+namespace GdscManagement.Common.Features.Users;
 
 public readonly struct Roles
 {

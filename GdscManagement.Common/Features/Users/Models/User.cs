@@ -1,13 +1,15 @@
+using GdscManagement.Common.Features.Base;
 using Microsoft.AspNetCore.Identity;
 
-namespace GdscManagement.Features.Users.Models;
+namespace GdscManagement.Common.Features.Users.Models;
 
-public class User : IdentityUser
+public class User : IdentityUser, IModel
 {
     public User(string firstName, string lastName)
     {
         FirstName = firstName;
         LastName = lastName;
+        Created = Updated = DateTime.UtcNow;
     }
 
     [PersonalData] public string FirstName { get; set; }
@@ -18,4 +20,7 @@ public class User : IdentityUser
     {
         return FirstName + " " + LastName;
     }
+
+    public DateTime Created { get; set; }
+    public DateTime Updated { get; set; }
 }

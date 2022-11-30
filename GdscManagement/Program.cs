@@ -4,9 +4,9 @@ using GdscManagement.API;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using GdscManagement.Areas.Identity;
+using GdscManagement.Common;
+using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Data;
-using GdscManagement.Data.Repository;
-using GdscManagement.Features.Users.Models;
 using GdscManagement.Services;
 using GdscManagement.Utilities;
 using Microsoft.AspNetCore.Authentication;
@@ -37,7 +37,6 @@ services.AddMudServices(config =>
 });
 services.AddBlazoredLocalStorage();
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<User>>();
-services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 services.AddScoped(typeof(ViewModelHelper<>));
 services.AddScoped<PreferencesService>();
 
@@ -54,7 +53,8 @@ services.AddAuthentication().AddGoogle(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name", "string");
 });
 
-services.AddAPI();
+services.AddCommon<ApplicationDbContext>();
+services.AddApi();
 
 var app = builder.Build();
 
@@ -80,7 +80,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseAPI();
+app.UseApi();
 
 app.MapControllers();
 app.MapBlazorHub();

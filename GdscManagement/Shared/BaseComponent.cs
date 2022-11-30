@@ -1,5 +1,6 @@
 using System.Security.Claims;
-using GdscManagement.Features.Users.Models;
+using GdscManagement.Common.Features.Users;
+using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

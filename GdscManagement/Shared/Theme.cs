@@ -1,6 +1,6 @@
 using MudBlazor;
 
-namespace GdscRecruitment.Common.Shared;
+namespace GdscManagement.Shared;
 
 public class Theme
 {

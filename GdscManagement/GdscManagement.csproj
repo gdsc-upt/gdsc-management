@@ -9,6 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
@@ -21,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GdscManagement.API\GdscManagement.API.csproj" />
+      <ProjectReference Include="..\GdscManagement.Common\GdscManagement.Common.csproj" />
     </ItemGroup>
 
 </Project>

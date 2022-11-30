@@ -1,14 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
-using GdscRecruitment.Common.Features.Base;
+using GdscManagement.Common.Features.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace GdscManagement.Data.Repository;
+namespace GdscManagement.Common.Repository;
 
 public class Repository<T> : IRepository<T> where T : class, IModel
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext _context;
 
-    public Repository(ApplicationDbContext context)
+    public Repository(DbContext context)
     {
         _context = context;
         DbSet = _context.Set<T>();
