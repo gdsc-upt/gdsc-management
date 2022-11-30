@@ -1,4 +1,13 @@
-<MudDrawer @onmouseenter="OpenDrawer" @onmouseleave="CloseDrawer" Anchor="Anchor.Start" ClipMode="DrawerClipMode.Always" @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini">
+<MudDrawer
+    Class="@(_open ? "d-flex" : "d-none d-sm-flex")"
+    @onmouseenter="OpenDrawer"
+    @onmouseleave="CloseDrawer"
+    Anchor="Anchor.Start"
+    ClipMode="DrawerClipMode.Always"
+    @bind-Open="@_open"
+    Elevation="4"
+    Breakpoint="Breakpoint.Sm"
+    Variant="@DrawerVariant.Mini">
     <NavMenu></NavMenu>
 </MudDrawer>
 

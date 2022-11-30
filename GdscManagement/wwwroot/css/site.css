@@ -1,11 +1,19 @@
-.full-width {
-    width: 100%;
-}
-
 .width-auto {
     width: auto !important;
 }
 
 .text-center {
     text-align: center;
+}
+
+/* Hide drawer on small screens */
+@media (max-width: 600px) {
+    body {
+        --mud-drawer-width-mini-left: 0;
+    }
+}
+
+/* Increase the dimensions of custom svg icons (ex: logo) */
+svg[viewBox="0 0 24 24"].mud-nav-link-icon-default {
+    font-size: 2rem;
 }

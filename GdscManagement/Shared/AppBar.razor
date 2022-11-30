@@ -1,23 +1,33 @@
+@using GdscManagement.Utilities
 <MudAppBar Elevation="1" Class="d-flex">
     <MudGrid>
         <MudItem xs="1" sm="3">
-            <MudPaper Elevation="0" class="mud-width-full">
-                <MudIconButton OnClick="ToggleDrawer" Icon="fa-solid fa-compass" Color="Color.Primary" Edge="Edge.Start"/>
-            </MudPaper>
+            <MudIconButton
+                Class="d-flex d-sm-none"
+                OnClick="ToggleDrawer"
+                Icon="fa-solid fa-compass"
+                Color="Color.Primary"
+                Edge="Edge.Start"/>
         </MudItem>
 
-        <MudItem xs="8" sm="6">
-            <MudPaper Elevation="0" class="mud-width-full d-flex justify-center">
-                <MudNavLink Href="/" Match="NavLinkMatch.All" Class="d-flex flex-column width-auto">
-                    <MudText Typo="Typo.h6" Color="Color.Success" Class="text-center">GDSC Management</MudText>
-                </MudNavLink>
-            </MudPaper>
+        <MudItem xs="8" sm="6" Class="d-flex justify-center">
+            <MudNavLink
+                Href="/"
+                Icon="@GdscIcons.Logo"
+                Match="NavLinkMatch.All"
+                Class="d-flex align-center width-auto">
+
+                <MudText
+                    Typo="Typo.h6"
+                    Color="Color.Success"
+                    Class="text-center d-none d-sm-flex">
+                    GDSC Management
+                </MudText>
+            </MudNavLink>
         </MudItem>
 
-        <MudItem xs="3" sm="3">
-            <MudPaper Elevation="0" class="mud-width-full d-flex justify-end">
-                <UserSettings/>
-            </MudPaper>
+        <MudItem xs="3" sm="3" Class="d-flex justify-end">
+            <UserSettings/>
         </MudItem>
     </MudGrid>
 </MudAppBar>
