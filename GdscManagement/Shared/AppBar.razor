@@ -2,9 +2,10 @@
     <MudGrid>
         <MudItem xs="1" sm="3">
             <MudPaper Elevation="0" class="mud-width-full">
-                <MudIconButton OnClick="ToggleDrawer" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"/>
+                <MudIconButton OnClick="ToggleDrawer" Icon="fa-solid fa-compass" Color="Color.Primary" Edge="Edge.Start"/>
             </MudPaper>
         </MudItem>
+
         <MudItem xs="8" sm="6">
             <MudPaper Elevation="0" class="mud-width-full d-flex justify-center">
                 <MudNavLink Href="/" Match="NavLinkMatch.All" Class="d-flex flex-column width-auto">
@@ -12,9 +13,10 @@
                 </MudNavLink>
             </MudPaper>
         </MudItem>
+
         <MudItem xs="3" sm="3">
             <MudPaper Elevation="0" class="mud-width-full d-flex justify-end">
-                <LoginDisplay/>
+                <UserSettings/>
             </MudPaper>
         </MudItem>
     </MudGrid>

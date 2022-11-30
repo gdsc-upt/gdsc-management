@@ -6,13 +6,11 @@ namespace GdscManagement.Shared;
 
 public partial class ThemeProvider : ComponentBase, IDisposable
 {
-    [Inject] private LayoutService LayoutService { get; set; } = null!;
-
-    private MudThemeProvider _mudThemeProvider = null!;
+    [Inject] private PreferencesService PreferencesService { get; set; } = null!;
 
     protected override void OnInitialized()
     {
-        LayoutService.MajorUpdateOccured += LayoutServiceOnMajorUpdateOccured;
+        PreferencesService.MajorUpdateOccured += PreferencesServiceOnMajorUpdateOccured;
         base.OnInitialized();
     }
 
@@ -22,23 +20,15 @@ public partial class ThemeProvider : ComponentBase, IDisposable
 
         if (firstRender)
         {
-            await LayoutService.LoadPreferences();
-            // _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-            await ApplyUserPreferences();
+            await PreferencesService.Load();
             StateHasChanged();
         }
     }
 
-    private async Task ApplyUserPreferences()
-    {
-        var defaultDarkMode = await _mudThemeProvider.GetSystemPreference();
-        await LayoutService.ApplyUserPreferences(defaultDarkMode);
-    }
-
     public void Dispose()
     {
-        LayoutService.MajorUpdateOccured -= LayoutServiceOnMajorUpdateOccured;
+        PreferencesService.MajorUpdateOccured -= PreferencesServiceOnMajorUpdateOccured;
     }
 
-    private void LayoutServiceOnMajorUpdateOccured(object? sender, EventArgs e) => StateHasChanged();
+    private void PreferencesServiceOnMajorUpdateOccured(object? sender, EventArgs e) => StateHasChanged();
 }

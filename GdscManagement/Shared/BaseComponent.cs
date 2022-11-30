@@ -31,7 +31,7 @@ public abstract class BaseComponent : OwningComponentBase
     private UserManager<User>? _userManager;
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
-    protected User? User { get; private set; }
+    protected User User { get; private set; } = null!;
     protected bool IsAuthenticated { get; private set; }
     protected bool IsAdmin { get; private set; }
 
@@ -55,6 +55,7 @@ public abstract class BaseComponent : OwningComponentBase
         ClaimsPrincipal = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
         IsAuthenticated = ClaimsPrincipal.Identity?.IsAuthenticated ?? false;
         IsAdmin = ClaimsPrincipal.IsInRole(Roles.Admin);
-        User = await UserManager.GetUserAsync(ClaimsPrincipal);
+        var user = await UserManager.GetUserAsync(ClaimsPrincipal);
+        User = user ?? throw new InvalidOperationException("User not found!");
     }
 }

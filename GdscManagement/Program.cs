@@ -38,7 +38,7 @@ services.AddBlazoredLocalStorage();
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<User>>();
 services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 services.AddScoped(typeof(ViewModelHelper<>));
-services.AddScoped<LayoutService>();
+services.AddScoped<PreferencesService>();
 
 services.AddAuthentication().AddGoogle(options =>
 {
