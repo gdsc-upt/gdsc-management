@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Blazored.LocalStorage;
+using GdscManagement.API;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using GdscManagement.Areas.Identity;
@@ -10,7 +11,6 @@ using GdscManagement.Services;
 using GdscManagement.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -54,9 +54,7 @@ services.AddAuthentication().AddGoogle(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name", "string");
 });
 
-services.AddControllers();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo {Title = "Gdsc Management API", Version = "v1"}));
+services.AddAPI();
 
 var app = builder.Build();
 
@@ -82,11 +80,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-});
+app.UseAPI();
 
 app.MapControllers();
 app.MapBlazorHub();

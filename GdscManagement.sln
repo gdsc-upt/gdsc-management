@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GdscManagement", "GdscManagement\GdscManagement.csproj", "{2952EDC8-57FE-45E0-9ECF-006B0A175643}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GdscManagement.API", "GdscManagement.API\GdscManagement.API.csproj", "{7FF5360E-4EF1-4330-8C5C-B8FB7E7C614A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GdscManagement.Common", "GdscManagement.Common\GdscManagement.Common.csproj", "{E55E6722-8CA0-4AFE-8CFC-8A4B3E3D8808}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{2952EDC8-57FE-45E0-9ECF-006B0A175643}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2952EDC8-57FE-45E0-9ECF-006B0A175643}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2952EDC8-57FE-45E0-9ECF-006B0A175643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FF5360E-4EF1-4330-8C5C-B8FB7E7C614A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FF5360E-4EF1-4330-8C5C-B8FB7E7C614A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FF5360E-4EF1-4330-8C5C-B8FB7E7C614A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FF5360E-4EF1-4330-8C5C-B8FB7E7C614A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E55E6722-8CA0-4AFE-8CFC-8A4B3E3D8808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E55E6722-8CA0-4AFE-8CFC-8A4B3E3D8808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E55E6722-8CA0-4AFE-8CFC-8A4B3E3D8808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E55E6722-8CA0-4AFE-8CFC-8A4B3E3D8808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
