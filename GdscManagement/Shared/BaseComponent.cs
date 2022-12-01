@@ -1,18 +1,27 @@
 using System.Security.Claims;
+using AutoMapper;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
-using GdscManagement.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace GdscManagement.Shared;
 
-public abstract class BaseComponent<T> : BaseComponent where T : class
+public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService> where TService : class
 {
-    private T? _service;
+    [Inject] protected IMapper Mapper { get; set; } = default!;
+    protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
+    protected IEnumerable<TModel> Map(IEnumerable<TViewModel> viewModel) => Mapper.Map<IEnumerable<TModel>>(viewModel);
+    protected TViewModel Map(TModel model) => Mapper.Map<TViewModel>(model);
+    protected IEnumerable<TViewModel> Map(IEnumerable<TModel> model) => Mapper.Map<IEnumerable<TViewModel>>(model);
+}
 
-    protected T Service
+public abstract class BaseComponent<TService> : BaseComponent where TService : class
+{
+    private TService? _service;
+
+    protected TService Service
     {
         get
         {
@@ -22,15 +31,15 @@ public abstract class BaseComponent<T> : BaseComponent where T : class
             }
 
             // We cache this because we don't know the lifetime. We have to assume that it could be transient.
-            return _service ??= ScopedServices.GetRequiredService<T>();
+            return _service ??= ScopedServices.GetRequiredService<TService>();
         }
     }
 }
 
 public abstract class BaseComponent : OwningComponentBase
 {
-    private UserManager<User>? _userManager;
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    private UserManager<User>? _userManager;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
     protected User? User { get; private set; }
     protected bool IsAuthenticated { get; private set; }

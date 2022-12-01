@@ -1,4 +1,3 @@
-using AutoMapper;
 using GdscManagement.API.Features.Users.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
@@ -15,7 +14,7 @@ public class UserController : ApiController<User, UserResponse>
 {
     private readonly UserManager<User> _userManager;
 
-    public UserController(UserManager<User> userManager, IMapper mapper) : base(mapper)
+    public UserController(UserManager<User> userManager, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _userManager = userManager;
     }

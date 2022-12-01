@@ -1,0 +1,172 @@
+@using Microsoft.AspNetCore.Components
+@using GdscManagement.Features.Users
+@using GdscManagement.Utilities
+@using Microsoft.EntityFrameworkCore
+@using GdscManagement.Features.Base
+@using Microsoft.AspNetCore.Identity
+@using GdscManagement.Common.Features.Users.Models
+@inherits OwningComponentBase<UserManager<User>>
+@inject ViewModelHelper<UserViewModel> Helper
+@inject NavigationManager Navigation
+
+<MudTable
+    Class="mt-5"
+    Loading="Loading"
+    SelectedItems="SelectedItems"
+    SelectedItemsChanged="SelectedItemsChanged"
+    T="UserViewModel"
+    MultiSelection="true"
+    Items="Items"
+    OnRowClick="NavigateTo"
+    Hover="true"
+    Filter="element => FilterFunc(element, _searchString)"
+    Breakpoint="Breakpoint.Sm"
+    LoadingProgressColor="Color.Info">
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Users</MudText>
+
+        <MudSpacer/>
+
+        <MudTextField
+            @bind-Value="_searchString"
+            Placeholder="Search"
+            Adornment="Adornment.Start"
+            AdornmentIcon="fa-solid fa-magnifying-glass"
+            AdornmentColor="Color.Tertiary"
+            IconSize="Size.Small"
+            Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel
+                SortBy="new Func<UserViewModel, object>(x => x.Avatar)">
+                @Helper.GetLabel(x => x.Avatar)
+            </MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel
+                SortBy="new Func<UserViewModel, object>(x => x.FirstName)">
+                @Helper.GetLabel(x => x.FirstName)
+            </MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel
+                SortBy="new Func<UserViewModel, object>(x => x.LastName)">
+                @Helper.GetLabel(x => x.LastName)
+            </MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel
+                SortBy="new Func<UserViewModel, object>(x => x.Created)">
+                @Helper.GetLabel(x => x.Created)
+            </MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel
+                SortBy="new Func<UserViewModel, object>(x => x.Updated)">
+                @Helper.GetLabel(x => x.Updated)
+            </MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="@Helper.GetLabel(x => x.Avatar)">
+            <MudAvatar Image="@context.Avatar"></MudAvatar>
+        </MudTd>
+        <MudTd DataLabel="@Helper.GetLabel(x => x.FirstName)">@context.FirstName </MudTd>
+        <MudTd DataLabel="@Helper.GetLabel(x => x.LastName)">@context.LastName </MudTd>
+        @* <MudTd DataLabel="@Helper.GetLabel(x => x.Type)"> *@
+        @* <MudTooltip Color="@context.Type.GetColor()" Text="@context.Type.GetDescription()" Arrow="true"> *@
+        @* <MudText Color="@context.Type.GetColor()">@context.Type.GetName()</MudText> *@
+        @* </MudTooltip> *@
+        @* </MudTd> *@
+        <MudTd DataLabel="@Helper.GetLabel(x => x.Created)">@context.Created </MudTd>
+        <MudTd DataLabel="@Helper.GetLabel(x => x.Updated)">@context.Updated </MudTd>
+        <MudTd>
+            <MudButton
+                IconColor="Color.Error"
+                StartIcon="fa-solid fa-trash"
+                OnClick="() => Delete(context)">
+            </MudButton>
+        </MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager/>
+    </PagerContent>
+
+    <LoadingContent>
+        <MudText>Fetching data...</MudText>
+    </LoadingContent>
+
+    <NoRecordsContent>
+        <MudText>There are no records to display.</MudText>
+    </NoRecordsContent>
+</MudTable>
+
+@code {
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LoadingChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<HashSet<UserViewModel>> SelectedItemsChanged { get; set; }
+
+    [Parameter]
+    public HashSet<UserViewModel> SelectedItems { get; set; } = null!;
+
+    [Parameter]
+    public IEnumerable<UserViewModel> Items { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<string> OnActionExecuted { get; set; }
+
+    string _searchString = "";
+
+    async Task Delete(ViewModel context)
+    {
+        await SetLoading(true);
+        var user = await Service.Users.FirstOrDefaultAsync(u => u.Id == context.Id);
+        if (user is null)
+        {
+            return;
+        }
+        await Service.DeleteAsync(user);
+        await OnActionExecuted.InvokeAsync("delete");
+        await SetLoading(false);
+    }
+
+    void NavigateTo(TableRowClickEventArgs<UserViewModel> tableRowClick)
+    {
+        Navigation.NavigateTo($"/users/{tableRowClick.Item.Id}/");
+    }
+
+    static bool FilterFunc(UserViewModel element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase) || $"{element.FirstName} {element.LastName} {element.Id}".Contains(searchString);
+    }
+
+    async Task SetLoading(bool loading)
+    {
+        Loading = loading;
+        await LoadingChanged.InvokeAsync(loading);
+    }
+}

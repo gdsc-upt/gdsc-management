@@ -1,8 +1,8 @@
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Reflection;
 using GdscManagement.Features.Base;
-using MudBlazor;
+using GdscManagement.Utilities.Attributes;
 
 namespace GdscManagement.Utilities;
 
@@ -16,7 +16,7 @@ public class ViewModelHelper<T> where T : ViewModel
             return string.Empty;
         }
 
-        var display = member.Member.GetCustomAttribute<LabelAttribute>();
+        var display = member.Member.GetCustomAttribute<DisplayAttribute>();
         return display?.Name ?? member.Member.Name;
     }
 
@@ -28,8 +28,8 @@ public class ViewModelHelper<T> where T : ViewModel
             return false;
         }
 
-        var attribute = member.Member.GetCustomAttribute<ReadOnlyAttribute>();
-        return attribute?.IsReadOnly ?? false;
+        var attribute = member.Member.GetCustomAttribute<DisplayExtrasAttribute>();
+        return attribute?.ReadOnly ?? false;
     }
 
     private static MemberExpression? GetMemberExpression(Expression<Func<T, object>> expr)
@@ -43,5 +43,17 @@ public class ViewModelHelper<T> where T : ViewModel
             default:
                 return expr.Body as MemberExpression;
         }
+    }
+
+    public DisplayExtrasAttribute GetDisplayExtras(PropertyInfo property)
+    {
+        var attribute = property.GetCustomAttribute<DisplayExtrasAttribute>();
+        return attribute ?? new DisplayExtrasAttribute();
+    }
+
+    public DisplayAttribute GetDisplay(PropertyInfo property)
+    {
+        var attribute = property.GetCustomAttribute<DisplayAttribute>();
+        return attribute ?? new DisplayAttribute{Name = property.Name};
     }
 }

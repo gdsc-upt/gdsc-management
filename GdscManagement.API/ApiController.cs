@@ -2,18 +2,21 @@ using AutoMapper;
 using GdscManagement.API.Features.Base;
 using GdscManagement.Common.Features.Base;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GdscManagement.API;
 
 [ApiController]
-public abstract class ApiController<T, TR> : ControllerBase where T: IModel where TR: IModelResponse
+public abstract class ApiController<T, TR> : ControllerBase where T : IModel where TR : IModelResponse
 {
-    protected ApiController(IMapper mapper)
-    {
-        Mapper = mapper;
-    }
-
+    protected readonly IServiceProvider ServiceProvider;
     protected readonly IMapper Mapper;
+
+    protected ApiController(IServiceProvider serviceProvider)
+    {
+        ServiceProvider = serviceProvider;
+        Mapper = ServiceProvider.GetRequiredService<IMapper>();
+    }
 
     protected T Map(TR request)
     {

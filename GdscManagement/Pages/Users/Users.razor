@@ -1,0 +1,45 @@
+@attribute [Route("/users")]
+@using GdscManagement.Common.Features.Users
+@using GdscManagement.Features.Users
+@using Microsoft.AspNetCore.Identity
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Pages.Users.Components
+@using Microsoft.EntityFrameworkCore
+@inherits BaseComponent<UserManager<User>, User, UserViewModel>
+
+<PageTitle>Users</PageTitle>
+
+<UsersTableActions SelectedItems="@_selected"></UsersTableActions>
+
+<UsersTable Loading="_loading" OnActionExecuted="OnActionExecuted" Items="_items" @bind-SelectedItems="_selected"/>
+
+<UsersTableActions SelectedItems="@_selected"></UsersTableActions>
+
+<AuthorizeView Roles="@Roles.Admin">
+    <AddEditExampleForm OnValidSubmit="FetchData"></AddEditExampleForm>
+</AuthorizeView>
+
+@code {
+    bool _loading;
+    IEnumerable<UserViewModel> _items = new List<UserViewModel>();
+    HashSet<UserViewModel> _selected = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await FetchData();
+        _loading = false;
+    }
+
+    Task OnActionExecuted(string action)
+    {
+        return action == "delete" ? FetchData() : Task.CompletedTask;
+    }
+
+    async Task FetchData()
+    {
+        Console.WriteLine("Fetching data...");
+        _items = Map(await Service.Users.ToListAsync());
+    }
+
+}

@@ -1,13 +1,19 @@
-using System.ComponentModel;
-using MudBlazor;
+using System.ComponentModel.DataAnnotations;
+using GdscManagement.Utilities.Attributes;
 
 namespace GdscManagement.Features.Base;
 
 public abstract class ViewModel
 {
-    [Label("Identifier")] [ReadOnly(true)] public string Id { get; set; }
+    [Display(Name = "Identifier")]
+    [DisplayExtras(ReadOnly = true)]
+    public string? Id { get; set; }
 
-    [Label("Created")] [ReadOnly(true)] public DateTime Created { get; set; }
+    [Display(Name = "Created")]
+    [DisplayExtras(ReadOnly = true)]
+    public DateTime Created { get; set; }
 
-    [Label("Updated")] [ReadOnly(true)] public DateTime Updated { get; set; }
+    [Display(Name = "Updated")]
+    [DisplayExtras(ReadOnly = true)]
+    public DateTime Updated { get; set; }
 }

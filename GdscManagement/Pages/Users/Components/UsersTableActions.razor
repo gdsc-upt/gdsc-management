@@ -1,0 +1,49 @@
+@using GdscManagement.Common.Features.Users
+@using GdscManagement.Shared.Components
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Features.Users
+@using Microsoft.AspNetCore.Identity
+@inherits OwningComponentBase<UserManager<User>>
+
+<MudPaper Class="pa-4 mt-4 d-flex">
+    <AuthorizeView Roles="@Roles.Admin">
+        <Authorized>
+            <ErrorButton
+                Tooltip="Select items to delete"
+                Disabled="@(SelectedItems.Count == 0)"
+                Icon="fa-dumpster">
+            </ErrorButton>
+
+            <MudSpacer></MudSpacer>
+
+            <PrimaryButton
+                Text="Open Add page"
+                Href="/users/add"
+                Tooltip="Add new example">
+            </PrimaryButton>
+        </Authorized>
+
+        <NotAuthorized>
+            <ErrorButton
+                Tooltip="Only admins can delete"
+                Disabled="true"
+                Icon="fa-dumpster">
+            </ErrorButton>
+
+            <MudSpacer></MudSpacer>
+
+            <PrimaryButton
+                Text="Open add page"
+                Disabled="true"
+                Tooltip="Only admins can add">
+            </PrimaryButton>
+        </NotAuthorized>
+    </AuthorizeView>
+</MudPaper>
+
+@code {
+
+    [Parameter]
+    public HashSet<UserViewModel> SelectedItems { get; set; } = new();
+
+}

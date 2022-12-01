@@ -55,6 +55,7 @@ services.AddAuthentication().AddGoogle(options =>
 
 services.AddCommon<ApplicationDbContext>();
 services.AddApi();
+services.AddAutoMapper(typeof(AdminMappingProfiles));
 
 var app = builder.Build();
 
