@@ -19,23 +19,12 @@
                 <MudCardContent>
                     @foreach (var property in _viewModel.GetType().GetProperties())
                     {
-                        var extras = Helper.GetDisplayExtras(property);
-                        if (extras.ReadOnly && !IsEdit)
+                        if (property.GetExtrasInfo().ReadOnly && !IsEdit)
                         {
                             continue;
                         }
 
-                        var display = Helper.GetDisplay(property);
-
-                        <MudTextField
-                            Disabled="extras.ReadOnly"
-                            Required="extras.Required"
-                            Value="property.GetValue(_viewModel) as string"
-                            T="string"
-                            ValueChanged="value => property.SetValue(_viewModel, value)"
-                            HelperText="@display.Description"
-                            HelperTextOnFocus="true"
-                            Label="@display.Name"/>
+                        <FieldBuilder Property="property" ViewModel="_viewModel"/>
                     }
                 </MudCardContent>
 

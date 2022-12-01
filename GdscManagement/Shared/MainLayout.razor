@@ -14,7 +14,7 @@
                 private Drawer? _drawer;
             }
 
-            <AppBar ToggleDrawer="() => _drawer.ToggleDrawer()"></AppBar>
+            <AppBar ToggleDrawer="() => _drawer?.ToggleDrawer()"></AppBar>
 
             <Drawer @ref="_drawer"/>
 

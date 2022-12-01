@@ -8,7 +8,7 @@ namespace GdscManagement.Utilities;
 
 public class ViewModelHelper<T> where T : ViewModel
 {
-    public string GetLabel(Expression<Func<T, object>> property)
+    public string GetLabel(Expression<Func<T, object?>> property)
     {
         var member = GetMemberExpression(property);
         if (member is null)
@@ -20,7 +20,7 @@ public class ViewModelHelper<T> where T : ViewModel
         return display?.Name ?? member.Member.Name;
     }
 
-    public bool IsReadOnly(Expression<Func<T, object>> property)
+    public bool IsReadOnly(Expression<Func<T, object?>> property)
     {
         var member = GetMemberExpression(property);
         if (member is null)
@@ -32,7 +32,7 @@ public class ViewModelHelper<T> where T : ViewModel
         return attribute?.ReadOnly ?? false;
     }
 
-    private static MemberExpression? GetMemberExpression(Expression<Func<T, object>> expr)
+    private static MemberExpression? GetMemberExpression(Expression<Func<T, object?>> expr)
     {
         switch (expr.Body.NodeType)
         {

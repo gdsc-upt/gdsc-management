@@ -16,6 +16,10 @@ public class UserViewModel : ViewModel
     public string? LastName { get; set; }
 
     public string? Avatar { get; set; }
+    public DateTime? NullableDateTime { get; set; }
+    public DateTime DateTime { get; set; }
+    public bool Boolean { get; set; }
+    public int Integer { get; set; }
 
     public override string ToString()
     {

@@ -1,0 +1,78 @@
+@using System.Reflection
+@using GdscManagement.Utilities
+@using GdscManagement.Utilities.Attributes
+@using System.ComponentModel.DataAnnotations
+@using GdscManagement.Features.Base
+
+@switch (Property.PropertyType)
+{
+    case { } t when t == typeof(string):
+        <MudTextField
+            Disabled="Extras.ReadOnly"
+            Required="Extras.Required"
+            Value="@((string?) Property.GetValue(ViewModel))"
+            ValueChanged="SetValue"
+            T="string"
+            HelperText="@Display.Description"
+            InputType="@Extras.InputType"
+            HelperTextOnFocus="true"
+            Label="@Display.Name"/>
+        break;
+
+    case { } t when t == typeof(bool) || t == typeof(bool?):
+        <MudSwitch
+            Disabled="Extras.ReadOnly"
+            Required="Extras.Required"
+            Color="Color.Primary"
+            Checked="@((bool?) Property.GetValue(ViewModel))"
+            CheckedChanged="SetValue"
+            T="bool?"
+            Label="@Display.Name"/>
+        break;
+
+    case { } t when t == typeof(int) || t == typeof(int?):
+        <MudNumericField
+            Disabled="Extras.ReadOnly"
+            Required="Extras.Required"
+            Value="@((int?) Property.GetValue(ViewModel))"
+            T="int?"
+            ValueChanged="SetValue"
+            HelperText="@Display.Description"
+            HelperTextOnFocus="true"
+            Label="@Display.Name"/>
+        break;
+
+    case { } t when t == typeof(DateTime?) || t == typeof(DateTime):
+        <MudDatePicker
+            Disabled="Extras.ReadOnly"
+            Required="Extras.Required"
+            Date="@(Property.GetValue(ViewModel) as DateTime?)"
+            DateChanged="SetValue"
+            HelperText="@Display.Description"
+            HelperTextOnFocus="true"
+            Label="@Display.Name"/>
+        break;
+    default:
+        Console.WriteLine($"Type {Property.PropertyType} not supported");
+        break;
+}
+
+@code {
+
+    void SetValue<T>(T value)
+    {
+        Property.SetValue(ViewModel, value);
+    }
+
+    [Parameter, EditorRequired]
+    public PropertyInfo Property { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public ViewModel ViewModel { get; set; } = null!;
+
+    DisplayExtrasAttribute Extras => Property.GetExtrasInfo();
+    DisplayAttribute Display => Property.GetDisplayInfo();
+
+    bool IsString => Property.PropertyType == typeof(string);
+    bool IsDateTime => Property.PropertyType == typeof(DateTime);
+}
