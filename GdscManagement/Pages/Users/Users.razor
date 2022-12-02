@@ -1,8 +1,9 @@
-@attribute [Route("/users")]
+@attribute [Route(UserRoutes.Main)]
 @using GdscManagement.Common.Features.Users
 @using GdscManagement.Features.Users
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Pages.Users.Components
+@using GdscManagement.Utilities.Extensions
 @using Microsoft.EntityFrameworkCore
 @inherits BaseComponent<User, UserViewModel>
 
@@ -28,6 +29,14 @@
         await base.OnInitializedAsync();
         await FetchData();
         _loading = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Navigation.NavigateToFragment(JsRuntime);
+        }
     }
 
     Task OnActionExecuted(string action)

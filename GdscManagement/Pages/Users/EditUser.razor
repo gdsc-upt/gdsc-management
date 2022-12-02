@@ -1,5 +1,6 @@
-@page "/users/{id}"
+@attribute [Route(UserRoutes.Edit)]
 @using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Features.Users
 @using GdscManagement.Pages.Users.Components
 @inherits BaseComponent
 @inject ISnackbar Snackbar
@@ -27,7 +28,7 @@
         if (Model is null)
         {
             Snackbar.Add("User not found", Severity.Error);
-            NavigationManager.NavigateTo("/users");
+            NavigationManager.NavigateTo(UserRoutes.Main);
         }
     }
 

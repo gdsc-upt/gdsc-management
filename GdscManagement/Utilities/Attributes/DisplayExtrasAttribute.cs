@@ -17,5 +17,7 @@ public class DisplayExtrasAttribute : Attribute
     /// </value>
     public bool ReadOnly { get; set; }
     public bool Required { get; set; }
+    public bool IsImage { get; set; }
+    public bool HideOnTable { get; set; }
     public InputType InputType { get; set; } = InputType.Text;
 }

@@ -21,11 +21,11 @@ public abstract class ViewModel
 public interface IViewModel
 {
     [Display(Name = "Identifier")]
-    [DisplayExtras(ReadOnly = true)]
+    [DisplayExtras(ReadOnly = true, HideOnTable = true)]
     public string Id { get; set; }
 
     [Display(Name = "Created")]
-    [DisplayExtras(ReadOnly = true)]
+    [DisplayExtras(ReadOnly = true, HideOnTable = true)]
     public DateTime Created { get; set; }
 
     [Display(Name = "Updated")]

@@ -8,10 +8,10 @@
 @using GdscManagement.Utilities.Attributes
 @using GdscManagement.Utilities.Extensions
 @inject ISnackbar Snackbar
-@inject NavigationManager Navigation
 @inherits BaseComponent<User, UserViewModel>
 @inject ViewModelHelper<UserViewModel> Helper
 
+<span id="@(IsEdit ? "edit" : "add")"></span>
 <EditForm Model="@_viewModel" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator/>
     <MudGrid>
@@ -82,58 +82,41 @@
         _viewModel = Model is null ? _viewModel : Map(Model);
     }
 
-    async Task AddExample()
+    async Task<IdentityResult?> AddExample()
     {
-        if (Model is not null)
-        {
-            Snackbar.Add("Something went wrong, there's and existing Model", Severity.Error);
-            return;
-        }
+        if (Model is null) return await UserManager.CreateAsync(Map(_viewModel));
+        Snackbar.Add("Something went wrong, there's and existing Model", Severity.Error);
+        return null;
+    }
 
-        var result = await UserManager.CreateAsync(Map(_viewModel));
-        if (result.Errors.Any())
+    async Task<IdentityResult?> EditExample()
+    {
+        if (Model is not null) return await UserManager.UpdateAsync(Map(_viewModel));
+        Snackbar.Add("Something went wrong, Model is null", Severity.Error);
+        return null;
+    }
+
+    void GoBack()
+    {
+        Navigation.NavigateTo(UserRoutes.Main);
+    }
+
+    async Task OnSubmit()
+    {
+        var result = IsEdit ? await EditExample() : await AddExample();
+        if (result != null && result.Errors.Any())
         {
             Snackbar.Add(string.Join(",", result.Errors.Select(e => e.Description)), Severity.Error);
             return;
         }
 
         StateHasChanged();
-        Snackbar.Add("Example added!", Severity.Success);
-        GoBack();
-    }
-
-    async Task EditExample()
-    {
-        if (Model is null)
-        {
-            Snackbar.Add("Something went wrong, Model is null", Severity.Error);
-            return;
-        }
-
-        await UserManager.UpdateAsync(Map(_viewModel));
-        StateHasChanged();
-        Snackbar.Add("Example updated!", Severity.Success);
-        GoBack();
-    }
-
-    void GoBack()
-    {
-        Navigation.NavigateTo("/users");
-    }
-
-    async Task OnSubmit()
-    {
-        if (IsEdit)
-        {
-            await EditExample();
-        }
-        else
-        {
-            await AddExample();
-        }
+        var message = IsEdit ? "User updated successfully" : "User added successfully";
+        Snackbar.Add(message, Severity.Success);
 
         await OnValidSubmit.InvokeAsync();
         _viewModel = new UserViewModel();
+        GoBack();
     }
 
 }

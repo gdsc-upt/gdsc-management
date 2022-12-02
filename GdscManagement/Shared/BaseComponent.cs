@@ -5,9 +5,12 @@ using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Common.Repository;
 using GdscManagement.Features.Base;
+using GdscManagement.Utilities.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.JSInterop;
 
 namespace GdscManagement.Shared;
 
@@ -50,7 +53,10 @@ public abstract class BaseComponent<TService> : BaseComponent where TService : c
 
 public abstract class BaseComponent : OwningComponentBase
 {
-    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    [Inject] protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    [Inject] protected NavigationManager Navigation { get; set; } = default!;
+    [Inject] protected IJSRuntime JsRuntime { get; set; } = default!;
+
     private UserManager<User>? _userManager;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
     protected User? User { get; private set; }
@@ -79,5 +85,25 @@ public abstract class BaseComponent : OwningComponentBase
         IsAdmin = ClaimsPrincipal.IsInRole(Roles.Admin);
         var user = await UserManager.GetUserAsync(ClaimsPrincipal);
         User = user ?? throw new InvalidOperationException("User not found!");
+    }
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += TryFragmentNavigation;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Navigation.NavigateToFragment(JsRuntime);
+    }
+
+    private async void TryFragmentNavigation(object? sender, LocationChangedEventArgs args)
+    {
+        await Navigation.NavigateToFragment(JsRuntime);
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= TryFragmentNavigation;
     }
 }

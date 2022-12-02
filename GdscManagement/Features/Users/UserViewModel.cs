@@ -11,7 +11,7 @@ public class UserViewModel : User, IViewModel
     [DisplayExtras(Required = true)]
     public override string? UserName { get; set; }
 
-    [DisplayExtras(Required = true)]
+    [DisplayExtras(Required = true, InputType = InputType.Email)]
     public override string? Email { get; set; }
 
     [Display(Name = "First name", Description = "Your first name (ex. John)")]
@@ -22,6 +22,7 @@ public class UserViewModel : User, IViewModel
     [DisplayExtras(Required = true)]
     public override string? LastName { get; set; }
 
+    [DisplayExtras(IsImage = true)]
     public override string? Avatar { get; set; }
 
     [DisplayExtras(ReadOnly = true)]
