@@ -44,16 +44,4 @@ public class ViewModelHelper<T> where T : IViewModel
                 return expr.Body as MemberExpression;
         }
     }
-
-    public DisplayExtrasAttribute GetDisplayExtras(PropertyInfo property)
-    {
-        var attribute = property.GetCustomAttribute<DisplayExtrasAttribute>();
-        return attribute ?? new DisplayExtrasAttribute();
-    }
-
-    public DisplayAttribute GetDisplay(PropertyInfo property)
-    {
-        var attribute = property.GetCustomAttribute<DisplayAttribute>();
-        return attribute ?? new DisplayAttribute{Name = property.Name};
-    }
 }

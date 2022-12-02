@@ -1,11 +1,10 @@
 @attribute [Route("/users")]
 @using GdscManagement.Common.Features.Users
 @using GdscManagement.Features.Users
-@using Microsoft.AspNetCore.Identity
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Pages.Users.Components
 @using Microsoft.EntityFrameworkCore
-@inherits BaseComponent<UserManager<User>, User, UserViewModel>
+@inherits BaseComponent<User, UserViewModel>
 
 <PageTitle>Users</PageTitle>
 
@@ -39,7 +38,7 @@
     async Task FetchData()
     {
         Console.WriteLine("Fetching data...");
-        _items = Map(await Service.Users.ToListAsync());
+        _items = Map(await UserManager.Users.ToListAsync());
     }
 
 }

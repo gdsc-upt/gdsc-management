@@ -1,7 +1,7 @@
 @page "/users/{id}"
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Pages.Users.Components
-@inherits BaseComponent<Microsoft.AspNetCore.Identity.UserManager<User>>
+@inherits BaseComponent
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
@@ -22,7 +22,7 @@
     protected override async Task OnInitializedAsync()
     {
         // TODO: Fix .AsNoTracking() issue
-        Model = await Service.FindByIdAsync(Id);
+        Model = await UserManager.FindByIdAsync(Id);
 
         if (Model is null)
         {
@@ -31,9 +31,4 @@
         }
     }
 
-    void OnValidSubmit()
-    {
-        Snackbar.Add("User saved", Severity.Success);
-        NavigationManager.NavigateTo("/users");
-    }
 }

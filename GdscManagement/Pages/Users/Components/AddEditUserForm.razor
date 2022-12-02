@@ -6,9 +6,10 @@
 @using System.Reflection
 @using System.ComponentModel.DataAnnotations
 @using GdscManagement.Utilities.Attributes
+@using GdscManagement.Utilities.Extensions
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
-@inherits BaseComponent<UserManager<User>, User, UserViewModel>
+@inherits BaseComponent<User, UserViewModel>
 @inject ViewModelHelper<UserViewModel> Helper
 
 <EditForm Model="@_viewModel" OnValidSubmit="OnSubmit">
@@ -19,7 +20,8 @@
                 <MudCardContent>
                     @foreach (var property in _viewModel.GetType().GetProperties())
                     {
-                        if (property.GetExtrasInfo().ReadOnly && !IsEdit)
+                        var isReadonly = property.GetExtrasInfo().ReadOnly;
+                        if (property.IsHidden() || (isReadonly && !IsEdit))
                         {
                             continue;
                         }
@@ -88,7 +90,7 @@
             return;
         }
 
-        var result = await Service.CreateAsync(Map(_viewModel));
+        var result = await UserManager.CreateAsync(Map(_viewModel));
         if (result.Errors.Any())
         {
             Snackbar.Add(string.Join(",", result.Errors.Select(e => e.Description)), Severity.Error);
@@ -108,7 +110,7 @@
             return;
         }
 
-        await Service.UpdateAsync(Map(_viewModel));
+        await UserManager.UpdateAsync(Map(_viewModel));
         StateHasChanged();
         Snackbar.Add("Example updated!", Severity.Success);
         GoBack();

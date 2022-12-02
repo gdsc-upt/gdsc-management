@@ -1,14 +1,17 @@
 using System.Security.Claims;
 using AutoMapper;
+using GdscManagement.Common.Features.Base;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
+using GdscManagement.Common.Repository;
+using GdscManagement.Features.Base;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace GdscManagement.Shared;
 
-public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService> where TService : class
+public abstract class BaseComponent<TModel, TViewModel> : BaseComponent where TModel: IModel where TViewModel: IViewModel
 {
     [Inject] protected IMapper Mapper { get; set; } = default!;
     protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
@@ -17,11 +20,20 @@ public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponen
     protected IEnumerable<TViewModel> Map(IEnumerable<TModel> model) => Mapper.Map<IEnumerable<TViewModel>>(model);
 }
 
-public abstract class BaseComponent<TService> : BaseComponent where TService : class
+public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService> where TService : class, IRepository<IModel> where TModel: IModel
 {
-    private TService? _service;
+    [Inject] protected IMapper Mapper { get; set; } = default!;
+    protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
+    protected IEnumerable<TModel> Map(IEnumerable<TViewModel> viewModel) => Mapper.Map<IEnumerable<TModel>>(viewModel);
+    protected TViewModel Map(TModel model) => Mapper.Map<TViewModel>(model);
+    protected IEnumerable<TViewModel> Map(IEnumerable<TModel> model) => Mapper.Map<IEnumerable<TViewModel>>(model);
+}
 
-    protected TService Service
+public abstract class BaseComponent<TService> : BaseComponent where TService : class, IRepository<IModel>
+{
+    private TService? _repo;
+
+    protected TService Repo
     {
         get
         {
@@ -31,7 +43,7 @@ public abstract class BaseComponent<TService> : BaseComponent where TService : c
             }
 
             // We cache this because we don't know the lifetime. We have to assume that it could be transient.
-            return _service ??= ScopedServices.GetRequiredService<TService>();
+            return _repo ??= ScopedServices.GetRequiredService<TService>();
         }
     }
 }
