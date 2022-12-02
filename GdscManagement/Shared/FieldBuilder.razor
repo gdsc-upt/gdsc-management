@@ -68,11 +68,12 @@
     public PropertyInfo Property { get; set; } = null!;
 
     [Parameter, EditorRequired]
-    public ViewModel ViewModel { get; set; } = null!;
+    public IViewModel ViewModel { get; set; } = null!;
 
     DisplayExtrasAttribute Extras => Property.GetExtrasInfo();
     DisplayAttribute Display => Property.GetDisplayInfo();
 
     bool IsString => Property.PropertyType == typeof(string);
     bool IsDateTime => Property.PropertyType == typeof(DateTime);
+
 }

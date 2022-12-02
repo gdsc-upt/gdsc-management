@@ -68,7 +68,7 @@ public class ExternalLogin : PageModel
         }
 
         var existingUser = await _userManager.FindByEmailAsync(email);
-        var user = existingUser ?? new User("", "");
+        var user = existingUser ?? new User();
 
         await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
         await _emailStore.SetEmailAsync(user, email, CancellationToken.None);

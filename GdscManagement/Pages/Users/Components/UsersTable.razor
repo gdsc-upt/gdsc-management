@@ -135,7 +135,7 @@
 
     string _searchString = "";
 
-    async Task Delete(ViewModel context)
+    async Task Delete(IViewModel context)
     {
         await SetLoading(true);
         var user = await Service.Users.FirstOrDefaultAsync(u => u.Id == context.Id);

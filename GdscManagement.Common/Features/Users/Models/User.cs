@@ -5,16 +5,14 @@ namespace GdscManagement.Common.Features.Users.Models;
 
 public class User : IdentityUser, IModel
 {
-    public User(string firstName, string lastName)
+    public User()
     {
-        FirstName = firstName;
-        LastName = lastName;
         Created = Updated = DateTime.UtcNow;
     }
 
-    [PersonalData] public string FirstName { get; set; }
-    [PersonalData] public string LastName { get; set; }
-    [PersonalData] public string? Avatar { get; set; }
+    [PersonalData] public virtual string? FirstName { get; set; }
+    [PersonalData] public virtual string? LastName { get; set; }
+    [PersonalData] public virtual string? Avatar { get; set; }
 
     public override string ToString()
     {

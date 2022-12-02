@@ -88,8 +88,13 @@
             return;
         }
 
-    // var entity = new ExampleModel(_viewModel.Title) { Number = _viewModel.Number, Type = _viewModel.Type };
-    // await Service.Add(entity);
+        var result = await Service.CreateAsync(Map(_viewModel));
+        if (result.Errors.Any())
+        {
+            Snackbar.Add(string.Join(",", result.Errors.Select(e => e.Description)), Severity.Error);
+            return;
+        }
+
         StateHasChanged();
         Snackbar.Add("Example added!", Severity.Success);
         GoBack();
@@ -103,10 +108,7 @@
             return;
         }
 
-    // Model.Number = _viewModel.Number;
-    // Model.Type = _viewModel.Type;
-    // Model.Title = _viewModel.Title;
-    // await Service.Update(Model);
+        await Service.UpdateAsync(Map(_viewModel));
         StateHasChanged();
         Snackbar.Add("Example updated!", Severity.Success);
         GoBack();

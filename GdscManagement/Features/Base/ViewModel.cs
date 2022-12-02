@@ -17,3 +17,18 @@ public abstract class ViewModel
     [DisplayExtras(ReadOnly = true)]
     public DateTime Updated { get; set; }
 }
+
+public interface IViewModel
+{
+    [Display(Name = "Identifier")]
+    [DisplayExtras(ReadOnly = true)]
+    public string Id { get; set; }
+
+    [Display(Name = "Created")]
+    [DisplayExtras(ReadOnly = true)]
+    public DateTime Created { get; set; }
+
+    [Display(Name = "Updated")]
+    [DisplayExtras(ReadOnly = true)]
+    public DateTime Updated { get; set; }
+}

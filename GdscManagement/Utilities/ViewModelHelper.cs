@@ -6,7 +6,7 @@ using GdscManagement.Utilities.Attributes;
 
 namespace GdscManagement.Utilities;
 
-public class ViewModelHelper<T> where T : ViewModel
+public class ViewModelHelper<T> where T : IViewModel
 {
     public string GetLabel(Expression<Func<T, object?>> property)
     {

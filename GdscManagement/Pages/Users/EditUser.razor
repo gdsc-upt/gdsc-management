@@ -1,0 +1,39 @@
+@page "/users/{id}"
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Pages.Users.Components
+@inherits BaseComponent<Microsoft.AspNetCore.Identity.UserManager<User>>
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit user</PageTitle>
+
+@if (Model is not null)
+{
+    <AddEditUserForm Model="@Model" />
+}
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; } = null!;
+
+    private User? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Fix .AsNoTracking() issue
+        Model = await Service.FindByIdAsync(Id);
+
+        if (Model is null)
+        {
+            Snackbar.Add("User not found", Severity.Error);
+            NavigationManager.NavigateTo("/users");
+        }
+    }
+
+    void OnValidSubmit()
+    {
+        Snackbar.Add("User saved", Severity.Success);
+        NavigationManager.NavigateTo("/users");
+    }
+}
