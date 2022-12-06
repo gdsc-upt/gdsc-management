@@ -1,10 +1,8 @@
-name: application hosting
+name: GDSC Management deployment
 
 on: 
   push:
-    branches: [ 'main' ]
-  
-  workflow_dispatch:
+    branches: [ main ]
 
 env:
   REGISTRY: ghcr.io
@@ -45,12 +43,19 @@ jobs:
           context: .
           push: true
           file: GdscManagement/Dockerfile
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Run Docker container 
-        uses: docker://ghcr.io/dsc-upt/gdsc-management:latest
+          tags: ghcr.io/dsc-upt/gdsc-management:latest
+  
+  deploy:
+    needs: [ build-and-push ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull and run image on vm
+        uses: appleboy/ssh-action@master
         with:
-          args: /bin/sh -c ""
+          host: gdscupt.tech
+          #port: 69
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: /home/docker/deploy/deploy.sh /home/docker/gdsc/gdsc-management
           
 
