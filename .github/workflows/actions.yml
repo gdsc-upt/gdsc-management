@@ -48,8 +48,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Deployment of management application
-        run: |
-          docker pull ghcr.io/dsc-upt/gdsc-management
-          docker create ghcr.io/dsc-upt/gdsc-management --name dsc-upt/gdsc-management
+      - name: Run Docker container 
+        uses: docker://dsc-upt/gdsc-management:latest
+        with:
+          args: /bin/sh -c ""
+          
 
