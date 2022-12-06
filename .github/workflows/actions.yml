@@ -48,3 +48,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  deployment:
+    name: Deployment of management application
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          docker pull ghcr.io/dsc-upt/gdsc-management
+          docker create ghcr.io/dsc-upt/gdsc-management --name dsc-upt/gdsc-management
+          
+
