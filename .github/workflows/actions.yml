@@ -53,7 +53,6 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: gdscupt.tech
-          #port: 69
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: /home/docker/deploy/deploy.sh /home/docker/gdsc/gdsc-management
