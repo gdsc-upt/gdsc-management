@@ -55,6 +55,12 @@ public class ExternalLogin : PageModel
             return GoToErrorPage("Error loading external login information.");
         }
 
+        var id = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (id is null)
+        {
+            return GoToErrorPage("ID not found.");
+        }
+
         var isEmailVerified = info.Principal.FindFirstValue(CustomClaimTypes.EmailVerified);
         if (isEmailVerified != "True")
         {
@@ -67,8 +73,8 @@ public class ExternalLogin : PageModel
             return GoToErrorPage("No email from external provider.");
         }
 
-        var existingUser = await _userManager.FindByEmailAsync(email);
-        var user = existingUser ?? new User();
+        var existingUser = await _userManager.FindByIdAsync(id);
+        var user = existingUser ?? new User {Id = id};
 
         await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
         await _emailStore.SetEmailAsync(user, email, CancellationToken.None);

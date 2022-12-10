@@ -55,15 +55,14 @@ public class RevalidatingIdentityAuthenticationStateProvider<TUser>
         {
             return false;
         }
-        else if (!userManager.SupportsUserSecurityStamp)
+
+        if (!userManager.SupportsUserSecurityStamp)
         {
             return true;
         }
-        else
-        {
-            var principalStamp = principal.FindFirstValue(_options.ClaimsIdentity.SecurityStampClaimType);
-            var userStamp = await userManager.GetSecurityStampAsync(user);
-            return principalStamp == userStamp;
-        }
+
+        var principalStamp = principal.FindFirstValue(_options.ClaimsIdentity.SecurityStampClaimType);
+        var userStamp = await userManager.GetSecurityStampAsync(user);
+        return principalStamp == userStamp;
     }
 }

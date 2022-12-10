@@ -14,7 +14,8 @@ using Microsoft.JSInterop;
 
 namespace GdscManagement.Shared;
 
-public abstract class BaseComponent<TModel, TViewModel> : BaseComponent where TModel: IModel where TViewModel: IViewModel
+public abstract class BaseComponent<TModel, TViewModel> : BaseComponent
+    where TModel : IModel where TViewModel : IViewModel
 {
     [Inject] protected IMapper Mapper { get; set; } = default!;
     protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
@@ -23,7 +24,8 @@ public abstract class BaseComponent<TModel, TViewModel> : BaseComponent where TM
     protected IEnumerable<TViewModel> Map(IEnumerable<TModel> model) => Mapper.Map<IEnumerable<TViewModel>>(model);
 }
 
-public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService> where TService : class, IRepository<IModel> where TModel: IModel
+public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService>
+    where TService : class, IRepository<IModel> where TModel : IModel
 {
     [Inject] protected IMapper Mapper { get; set; } = default!;
     protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
@@ -56,12 +58,27 @@ public abstract class BaseComponent : OwningComponentBase
     [Inject] protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
     [Inject] protected NavigationManager Navigation { get; set; } = default!;
     [Inject] protected IJSRuntime JsRuntime { get; set; } = default!;
+    private  SignInManager<User>? _signInManager;
 
     private UserManager<User>? _userManager;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
     protected User? User { get; private set; }
     protected bool IsAuthenticated { get; private set; }
     protected bool IsAdmin { get; private set; }
+
+    protected SignInManager<User> SignInManager
+    {
+        get
+        {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+
+            // We cache this because we don't know the lifetime. We have to assume that it could be transient.
+            return _signInManager ??= ScopedServices.GetRequiredService<SignInManager<User>>();
+        }
+    }
 
     protected UserManager<User> UserManager
     {
@@ -84,7 +101,15 @@ public abstract class BaseComponent : OwningComponentBase
         IsAuthenticated = ClaimsPrincipal.Identity?.IsAuthenticated ?? false;
         IsAdmin = ClaimsPrincipal.IsInRole(Roles.Admin);
         var user = await UserManager.GetUserAsync(ClaimsPrincipal);
-        User = user ?? throw new InvalidOperationException("User not found!");
+        if (user is not null)
+        {
+            User = user;
+        }
+        else
+        {
+            await SignInManager.SignOutAsync();
+            // throw new InvalidOperationException("User not found!");
+        }
     }
 
     protected override void OnInitialized()
