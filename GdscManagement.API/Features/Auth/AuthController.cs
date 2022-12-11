@@ -2,6 +2,8 @@ using System.Security.Claims;
 using GdscManagement.Common.Features.Users.Models;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,20 +24,23 @@ public class AuthController : ControllerBase
         _jwtGenerator = new JwtGenerator(configuration);
     }
 
-    [AllowAnonymous]
-    [HttpPost("authenticate")]
-    public async Task<ActionResult> Authenticate([FromHeader] string token)
+    [AllowAnonymous, HttpPost("authenticate")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tokens))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IdentityError))]
+    public async Task<Results<Ok<Tokens>, BadRequest<IdentityError>>> Authenticate([FromHeader] string token)
     {
         var payload = await VerifyGoogleTokenId(token);
-        if (payload == null)
+        if (payload is null)
         {
-            return BadRequest("Invalid token");
+            var error = new IdentityError { Code = "InvalidToken", Description = "Invalid token" };
+            return TypedResults.BadRequest(error);
         }
 
         var user = await _userManager.FindByEmailAsync(payload.Email);
-        if (user == null)
+        if (user is null)
         {
-            return BadRequest("User not found");
+            var error = new IdentityError { Code = "UserNotFound", Description = "User not found" };
+            return TypedResults.BadRequest(error);
         }
 
         var claims = new ClaimsIdentity(new Claim[] {
@@ -48,7 +53,8 @@ public class AuthController : ControllerBase
         var roles = await _userManager.GetRolesAsync(user);
         claims.AddClaims(roles.Select(role => new Claim("roles", role)));
 
-        return Ok(_jwtGenerator.CreateAccessToken(claims));
+        var accessToken = _jwtGenerator.CreateAccessToken(claims);
+        return TypedResults.Ok(new Tokens{AccessToken = accessToken, RefreshToken = accessToken});
     }
 
     private static async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleTokenId(string token)
