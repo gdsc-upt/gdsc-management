@@ -1,13 +1,10 @@
-﻿using System.Text;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace GdscManagement.API;
 
@@ -30,20 +27,10 @@ public static class Startup
                 In = ParameterLocation.Header,
                 Description = "JWT Authorization header using the Bearer scheme."
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = JwtBearerDefaults.AuthenticationScheme,
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
         services.AddAutoMapper(typeof(ApiMappingProfiles));
         return services;

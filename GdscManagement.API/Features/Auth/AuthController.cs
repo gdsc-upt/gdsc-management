@@ -24,6 +24,11 @@ public class AuthController : ControllerBase
         _jwtGenerator = new JwtGenerator(configuration);
     }
 
+    /// <summary>
+    /// Authenticates a Google user and returns a JWT accessToken and refreshToken
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [AllowAnonymous, HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tokens))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IdentityError))]
