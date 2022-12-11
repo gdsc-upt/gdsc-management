@@ -1,5 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace GdscManagement.API;
@@ -11,9 +18,44 @@ public static class Startup
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
         services.AddControllers();
-        services.AddSwaggerGen(options => options.SwaggerDoc("v1", SwaggerInfo));
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", SwaggerInfo);
+            options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme."
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
         services.AddAutoMapper(typeof(ApiMappingProfiles));
         return services;
+    }
+
+    public static AuthenticationBuilder AddJwt(this AuthenticationBuilder builder)
+    {
+        return builder.AddJwtBearer(options =>
+        {
+            options.IncludeErrorDetails = true;
+            options.SaveToken = true;
+        });
     }
 
     public static IApplicationBuilder UseApi(this IApplicationBuilder app)

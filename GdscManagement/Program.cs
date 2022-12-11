@@ -20,7 +20,6 @@ var services = builder.Services;
 var connectionString = configuration.GetConnectionString("Default") ??
                        throw new InvalidOperationException("Connection string 'Default' not found.");
 
-// Add services to the container.
 services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -51,7 +50,7 @@ services.AddAuthentication().AddGoogle(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name", "string");
     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name", "string");
     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name", "string");
-});
+}).AddJwt();
 
 services.AddCommon<ApplicationDbContext>();
 services.AddApi();
@@ -79,6 +78,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseApi();
@@ -86,5 +86,4 @@ app.UseApi();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();
