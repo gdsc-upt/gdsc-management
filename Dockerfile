@@ -5,14 +5,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["GdscManagement/GdscManagement.csproj", "GdscManagement/"]
-RUN dotnet restore "GdscManagement/GdscManagement.csproj"
-COPY . .
-WORKDIR "/src/GdscManagement"
-RUN dotnet build "GdscManagement.csproj" -c Release -o /app/build
+COPY ["GdscManagement/*.csproj", "GdscManagement/"]
+COPY ["GdscManagement.API/*.csproj", "GdscManagement.API/"]
+COPY ["GdscManagement.Common/*.csproj", "GdscManagement.Common/"]
 
-FROM build AS publish
-RUN dotnet publish "GdscManagement.csproj" -c Release -o /app/publish
+RUN dotnet restore
+
+COPY . .
+WORKDIR /src/GdscManagement
+
+FROM base AS publish
+RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
