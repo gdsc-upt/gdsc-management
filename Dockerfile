@@ -17,4 +17,4 @@ RUN dotnet publish "GdscManagement.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "GdscManagement.dll"]
+ENTRYPOINT ["dotnet", "GdscManagement.dll", "--migrate"]
