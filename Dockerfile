@@ -14,7 +14,7 @@ RUN dotnet restore
 COPY . .
 WORKDIR /src/GdscManagement
 
-FROM base AS publish
+FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
