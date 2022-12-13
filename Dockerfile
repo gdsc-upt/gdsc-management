@@ -17,4 +17,10 @@ RUN dotnet publish "GdscManagement.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "GdscManagement.dll", "--migrate"]
+
+COPY docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+RUN chmod +x /usr/bin/docker-entrypoint.sh
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# Link image with github repo
+LABEL org.opencontainers.image.source=https://github.com/dsc-upt/gdsc-management
