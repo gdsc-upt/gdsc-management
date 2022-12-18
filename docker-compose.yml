@@ -1,0 +1,12 @@
+services:
+  local:
+#    image: ghcr.io/dsc-upt/gdsc-management-main:latest
+    build: .
+    container_name: gdsc-management-local
+    restart: always
+    ports:
+      - 5286:80
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ./GdscManagement/appsettings.Development.json:/app/appsettings.json
