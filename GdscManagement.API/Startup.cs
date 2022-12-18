@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using GdscManagement.API.Features.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ public static class Startup
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
         services.AddAutoMapper(typeof(ApiMappingProfiles));
+        services.AddScoped<TokenService>();
         return services;
     }
 

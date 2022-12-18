@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace GdscManagement.API.Features.Auth;
@@ -16,12 +15,12 @@ namespace GdscManagement.API.Features.Auth;
 public class AuthController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
-    private readonly JwtGenerator _jwtGenerator;
+    private readonly TokenService _tokenService;
 
-    public AuthController(UserManager<User> userManager, IConfiguration configuration)
+    public AuthController(UserManager<User> userManager, TokenService tokenService)
     {
         _userManager = userManager;
-        _jwtGenerator = new JwtGenerator(configuration);
+        _tokenService = tokenService;
     }
 
     /// <summary>
@@ -58,7 +57,7 @@ public class AuthController : ControllerBase
         var roles = await _userManager.GetRolesAsync(user);
         claims.AddClaims(roles.Select(role => new Claim("roles", role)));
 
-        var accessToken = _jwtGenerator.CreateAccessToken(claims);
+        var accessToken = _tokenService.CreateAccessToken(claims);
         return TypedResults.Ok(new Tokens{AccessToken = accessToken, RefreshToken = accessToken});
     }
 
