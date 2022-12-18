@@ -28,7 +28,13 @@ public class UserController : ApiController<User, UserResponse>
     public async Task<Results<Ok<IEnumerable<UserResponse>>, UnauthorizedHttpResult>> Get()
     {
         var users = await _userManager.Users.ToListAsync();
-        return TypedResults.Ok(Map(users));
+        var response = users.Select(user =>
+        {
+            var res = Map(user);
+            res.Roles = _userManager.GetRolesAsync(user).Result.ToList();
+            return res;
+        });
+        return TypedResults.Ok(response);
     }
 
     [HttpPost("{id}/roles")]
