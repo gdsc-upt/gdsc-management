@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using GdscManagement.Features.Base;
 using GdscManagement.Utilities.Attributes;
-using Humanizer;
 
 namespace GdscManagement.Utilities.Extensions;
 
@@ -23,14 +22,15 @@ public static class PropertyInfoExtensions
     public static DisplayAttribute GetDisplayInfo(this PropertyInfo property)
     {
         var attribute = property.GetDeepAttribute<DisplayAttribute, IViewModel>();
-        return attribute ?? new DisplayAttribute{Name = property.Name.SplitCamelCase().FirstToUpper()};
+        return attribute ?? new DisplayAttribute { Name = property.Name.SplitCamelCase().FirstToUpper() };
     }
 
-    private static T? GetDeepAttribute<T, I>(this MemberInfo property) where T : Attribute
+    private static TAttribute? GetDeepAttribute<TAttribute, TInterface>(this MemberInfo property)
+        where TAttribute : Attribute
     {
-        var attribute = property.GetCustomAttribute<T>(true);
-        var viewModelInterface = property.ReflectedType?.GetInterface(typeof(I).Name);
-        var attributeFromInterface = viewModelInterface?.GetProperty(property.Name)?.GetCustomAttribute<T>();
+        var attribute = property.GetCustomAttribute<TAttribute>(true);
+        var viewModelInterface = property.ReflectedType?.GetInterface(typeof(TInterface).Name);
+        var attributeFromInterface = viewModelInterface?.GetProperty(property.Name)?.GetCustomAttribute<TAttribute>();
         return attribute ?? attributeFromInterface;
     }
 }
