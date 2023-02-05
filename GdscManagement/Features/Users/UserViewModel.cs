@@ -22,7 +22,7 @@ public class UserViewModel : User, IViewModel
     [DisplayExtras(Required = true)]
     public override string? LastName { get; set; }
 
-    [DisplayExtras(IsImage = true)]
+    [DisplayExtras(IsImage = true, InputType = InputType.Url)]
     public override string? Avatar { get; set; }
 
     [DisplayExtras(ReadOnly = true)]

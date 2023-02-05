@@ -12,6 +12,7 @@
 @inject ViewModelHelper<UserViewModel> Helper
 
 <span id="@(IsEdit ? "edit" : "add")"></span>
+
 <EditForm Model="@_viewModel" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator/>
     <MudGrid>
@@ -91,9 +92,26 @@
 
     async Task<IdentityResult?> EditExample()
     {
-        if (Model is not null) return await UserManager.UpdateAsync(Map(_viewModel));
-        Snackbar.Add("Something went wrong, Model is null", Severity.Error);
-        return null;
+        if (Model?.Id is null)
+        {
+            Snackbar.Add("Something went wrong, Model is null", Severity.Error);
+            return null;
+        }
+
+        var original = await UserManager.FindByIdAsync(Model.Id);
+        if (original is null)
+        {
+            Snackbar.Add("Something went wrong, Model is null", Severity.Error);
+            return null;
+        }
+
+        var edited = Map(_viewModel);
+        foreach (var property in edited.GetType().GetProperties())
+        {
+            property.SetValue(original, property.GetValue(edited));
+        }
+
+        return await UserManager.UpdateAsync(original);
     }
 
     void GoBack()

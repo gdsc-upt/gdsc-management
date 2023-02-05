@@ -2,6 +2,7 @@
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Features.Users
 @using GdscManagement.Pages.Users.Components
+@using Microsoft.EntityFrameworkCore
 @inherits BaseComponent
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
@@ -22,8 +23,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Fix .AsNoTracking() issue
-        Model = await UserManager.FindByIdAsync(Id);
+        Model = await UserManager.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
 
         if (Model is null)
         {

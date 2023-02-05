@@ -34,3 +34,7 @@ svg[viewBox="0 0 24 24"].mud-nav-link-icon-default {
 .spin-on-hover:hover .mud-icon-root {
     animation: spin 1s linear infinite;
 }
+
+.pointer {
+    cursor: pointer;
+}

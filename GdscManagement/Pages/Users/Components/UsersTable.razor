@@ -19,6 +19,7 @@
     T="UserViewModel"
     MultiSelection="true"
     Items="Items"
+    RowClass="pointer"
     OnRowClick="NavigateTo"
     Hover="true"
     Filter="element => FilterFunc(element, _searchString)"
@@ -65,7 +66,7 @@
                 continue;
             }
 
-            <TableData Property="property" ViewModel="context" />
+            <TableData Property="property" ViewModel="context"/>
         }
 
         @* <MudTd DataLabel="@Helper.GetLabel(x => x.Type)"> *@

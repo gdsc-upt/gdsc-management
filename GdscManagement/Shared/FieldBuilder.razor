@@ -17,6 +17,7 @@
             HelperText="@Display.Description"
             InputType="@Extras.InputType"
             HelperTextOnFocus="true"
+            Id="@Display.Name?.ToLower().Replace(" ", "")"
             Label="@Display.Name"/>
         break;
 
@@ -28,6 +29,7 @@
             Checked="@((bool?) Property.GetValue(ViewModel))"
             CheckedChanged="SetValue"
             T="bool?"
+            Id="@Display.Name?.ToLower().Replace(" ", "")"
             Label="@Display.Name"/>
         break;
 
@@ -40,6 +42,7 @@
             ValueChanged="SetValue"
             HelperText="@Display.Description"
             HelperTextOnFocus="true"
+            Id="@Display.Name?.ToLower().Replace(" ", "")"
             Label="@Display.Name"/>
         break;
 
@@ -51,6 +54,7 @@
             DateChanged="SetValue"
             HelperText="@Display.Description"
             HelperTextOnFocus="true"
+            Id="@Display.Name?.ToLower().Replace(" ", "")"
             Label="@Display.Name"/>
         break;
     default:
