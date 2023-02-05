@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GdscManagement.API.Features.Users;
 
 [Route("api/users")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
+// [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
 public class UserController : ApiController<User, UserResponse>
 {
     private readonly UserManager<User> _userManager;

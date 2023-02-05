@@ -1,8 +1,7 @@
 using GdscManagement.Services;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
-namespace GdscManagement.Shared;
+namespace GdscManagement.Pages.Shared;
 
 public partial class ThemeProvider : ComponentBase, IDisposable
 {

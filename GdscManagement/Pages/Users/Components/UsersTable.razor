@@ -6,7 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Utilities.Extensions
-@using GdscManagement.Shared.Tables
+@using GdscManagement.Pages.Shared.Tables
 @inherits OwningComponentBase<UserManager<User>>
 @inject ViewModelHelper<UserViewModel> Helper
 @inject NavigationManager Navigation
@@ -38,6 +38,7 @@
             AdornmentIcon="fa-solid fa-magnifying-glass"
             AdornmentColor="Color.Tertiary"
             IconSize="Size.Small"
+            Clearable="true"
             Class="mt-0">
         </MudTextField>
     </ToolBarContent>
@@ -111,7 +112,7 @@
     public HashSet<UserViewModel> SelectedItems { get; set; } = null!;
 
     [Parameter]
-    public IEnumerable<UserViewModel> Items { get; set; } = null!;
+    public List<UserViewModel> Items { get; set; } = null!;
 
     [Parameter]
     public EventCallback<string> OnActionExecuted { get; set; }

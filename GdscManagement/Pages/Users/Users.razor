@@ -3,17 +3,18 @@
 @using GdscManagement.Features.Users
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Pages.Users.Components
+@using GdscManagement.Pages.Shared.Tables
 @using GdscManagement.Utilities.Extensions
 @using Microsoft.EntityFrameworkCore
 @inherits BaseComponent<User, UserViewModel>
 
 <PageTitle>Users</PageTitle>
 
-<UsersTableActions SelectedItems="@_selected"></UsersTableActions>
+<TableActions T="UserViewModel" SelectedItems="@_selected"></TableActions>
 
 <UsersTable Loading="_loading" OnActionExecuted="OnActionExecuted" Items="_items" @bind-SelectedItems="_selected"/>
 
-<UsersTableActions SelectedItems="@_selected"></UsersTableActions>
+<TableActions T="UserViewModel" SelectedItems="@_selected"></TableActions>
 
 <AuthorizeView Roles="@Roles.Admin">
     <MudPaper Elevation="0" Class="my-7">
@@ -23,7 +24,7 @@
 
 @code {
     bool _loading;
-    IEnumerable<UserViewModel> _items = new List<UserViewModel>();
+    List<UserViewModel> _items = new ();
     HashSet<UserViewModel> _selected = new();
 
     protected override async Task OnInitializedAsync()
@@ -49,7 +50,7 @@
     async Task FetchData()
     {
         Console.WriteLine("Fetching data...");
-        _items = Map(await UserManager.Users.AsNoTracking().ToListAsync());
+        _items = Map(await UserManager.Users.AsNoTracking().ToListAsync()).ToList();
     }
 
 }

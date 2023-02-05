@@ -29,4 +29,40 @@
       <ProjectReference Include="..\GdscManagement.Common\GdscManagement.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Roles" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Shared\AppBar.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\ErrorButton.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\PrimaryButton.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Drawer.razor" />
+      <_ContentIncludedByDefault Remove="Shared\FieldBuilder.razor" />
+      <_ContentIncludedByDefault Remove="Shared\LoginView.razor" />
+      <_ContentIncludedByDefault Remove="Shared\MainLayout.razor" />
+      <_ContentIncludedByDefault Remove="Shared\NavMenu.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Tables\TableActions.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Tables\TableData.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Tables\TableHeader.razor" />
+      <_ContentIncludedByDefault Remove="Shared\ThemeProvider.razor" />
+      <_ContentIncludedByDefault Remove="Shared\UserSettings.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Shared\AppBar.razor" />
+      <AdditionalFiles Include="Pages\Shared\Components\ErrorButton.razor" />
+      <AdditionalFiles Include="Pages\Shared\Components\PrimaryButton.razor" />
+      <AdditionalFiles Include="Pages\Shared\Drawer.razor" />
+      <AdditionalFiles Include="Pages\Shared\FieldBuilder.razor" />
+      <AdditionalFiles Include="Pages\Shared\LoginView.razor" />
+      <AdditionalFiles Include="Pages\Shared\MainLayout.razor" />
+      <AdditionalFiles Include="Pages\Shared\NavMenu.razor" />
+      <AdditionalFiles Include="Pages\Shared\Tables\TableActions.razor" />
+      <AdditionalFiles Include="Pages\Shared\Tables\TableData.razor" />
+      <AdditionalFiles Include="Pages\Shared\Tables\TableHeader.razor" />
+      <AdditionalFiles Include="Pages\Shared\ThemeProvider.razor" />
+      <AdditionalFiles Include="Pages\Shared\UserSettings.razor" />
+    </ItemGroup>
+
 </Project>

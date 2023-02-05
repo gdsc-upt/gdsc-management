@@ -1,6 +1,6 @@
 using MudBlazor;
 
-namespace GdscManagement.Shared;
+namespace GdscManagement.Pages.Shared;
 
 public class Theme
 {

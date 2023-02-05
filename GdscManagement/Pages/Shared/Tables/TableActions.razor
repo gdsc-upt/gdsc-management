@@ -1,9 +1,7 @@
 @using GdscManagement.Common.Features.Users
-@using GdscManagement.Shared.Components
-@using GdscManagement.Common.Features.Users.Models
-@using GdscManagement.Features.Users
-@using Microsoft.AspNetCore.Identity
-@inherits OwningComponentBase<UserManager<User>>
+@using GdscManagement.Pages.Shared.Components
+@using GdscManagement.Features.Base
+@typeparam T where T: IViewModel
 
 <MudPaper Class="pa-4 mt-5 d-flex">
     <AuthorizeView Roles="@Roles.Admin">
@@ -44,6 +42,6 @@
 @code {
 
     [Parameter]
-    public HashSet<UserViewModel> SelectedItems { get; set; } = new();
+    public HashSet<T> SelectedItems { get; set; } = new();
 
 }
