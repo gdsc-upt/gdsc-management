@@ -80,6 +80,16 @@ public class Repository<T> : IRepository<T> where T : class, IModel
         return removed;
     }
 
+    public async Task<List<T>> DeleteAsync(string[] ids)
+    {
+        var entities = await DbSet.Where(item => ids.Contains(item.Id)).ToListAsync();
+        entities.ForEach(entity => DbSet.Remove(entity));
+
+        await Save();
+
+        return entities;
+    }
+
     private Task<int> Save()
     {
         return _context.SaveChangesAsync();

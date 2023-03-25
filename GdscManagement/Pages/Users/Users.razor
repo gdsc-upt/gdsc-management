@@ -6,15 +6,15 @@
 @using GdscManagement.Pages.Shared.Tables
 @using GdscManagement.Utilities.Extensions
 @using Microsoft.EntityFrameworkCore
-@inherits BaseComponent<User, UserViewModel>
+@inherits GdscManagement.Pages.Shared.BaseComponent<User, UserViewModel>
 
 <PageTitle>Users</PageTitle>
 
-<TableActions T="UserViewModel" SelectedItems="@_selected"></TableActions>
+<TableActions TModel="User" OnActionExecuted="OnActionExecuted" TViewModel="UserViewModel" SelectedItems="@_selected"></TableActions>
 
 <UsersTable Loading="_loading" OnActionExecuted="OnActionExecuted" Items="_items" @bind-SelectedItems="_selected"/>
 
-<TableActions T="UserViewModel" SelectedItems="@_selected"></TableActions>
+<TableActions TModel="User" OnActionExecuted="OnActionExecuted" TViewModel="UserViewModel" SelectedItems="@_selected"></TableActions>
 
 <AuthorizeView Roles="@Roles.Admin">
     <MudPaper Elevation="0" Class="my-7">

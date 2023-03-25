@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.JSInterop;
 
-namespace GdscManagement.Shared;
+namespace GdscManagement.Pages.Shared;
 
 public abstract class BaseComponent<TModel, TViewModel> : BaseComponent
     where TModel : IModel where TViewModel : IViewModel

@@ -1,6 +1,5 @@
 using Blazored.LocalStorage;
 using GdscManagement.Pages.Shared;
-using GdscManagement.Shared;
 using MudBlazor;
 
 namespace GdscManagement.Services;

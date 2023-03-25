@@ -5,6 +5,7 @@
         IconColor="Color.Error"
         Color="Color.Error"
         StartIcon="@StartIcon"
+        OnClick="OnClick"
         DisableElevation="true">
         @Text
     </MudButton>
@@ -23,6 +24,9 @@
 
     [Parameter]
     public string? Icon { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     private string StartIcon => Icon is not null ? "fa-solid " + Icon : "";
 

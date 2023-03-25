@@ -1,15 +1,20 @@
 @using GdscManagement.Common.Features.Users
+@using GdscManagement.Common.Repository
 @using GdscManagement.Pages.Shared.Components
 @using GdscManagement.Features.Base
-@typeparam T where T: IViewModel
+@using GdscManagement.Common.Features.Base
+@typeparam TViewModel where TViewModel : IViewModel
+@typeparam TModel where TModel : IModel
+@inject IRepository<TModel> Repo
 
 <MudPaper Class="pa-4 mt-5 d-flex">
     <AuthorizeView Roles="@Roles.Admin">
         <Authorized>
             <ErrorButton
+                OnClick="() => Delete()"
                 Tooltip="Select items to delete"
                 Disabled="@(SelectedItems.Count == 0)"
-                Icon="fa-dumpster">
+                Icon="fa-dumpster fa-bounce">
             </ErrorButton>
 
             <MudSpacer></MudSpacer>
@@ -42,6 +47,16 @@
 @code {
 
     [Parameter]
-    public HashSet<T> SelectedItems { get; set; } = new();
+    public HashSet<TViewModel> SelectedItems { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<string> OnActionExecuted { get; set; }
+
+    private async Task Delete()
+    {
+        Console.WriteLine("try delete");
+        await Repo.DeleteAsync(SelectedItems.Select(item => item.Id).ToArray());
+        await OnActionExecuted.InvokeAsync("delete");
+    }
 
 }

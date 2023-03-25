@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GdscManagement.Common.Repository;
 
-public interface IRepository<T> where T : class, IModel
+public interface IRepository<T> where T : IModel
 {
-    DbSet<T> DbSet { get; init; }
+    // DbSet<T> DbSet { get; init; }
 
     Task<T> AddAsync([NotNull] T entity);
 
@@ -18,4 +18,5 @@ public interface IRepository<T> where T : class, IModel
     Task<T?> UpdateAsync(T entity);
 
     Task<T?> DeleteAsync(string id);
+    Task<List<T>> DeleteAsync(string[] id);
 }
