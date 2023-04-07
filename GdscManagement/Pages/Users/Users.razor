@@ -50,6 +50,7 @@
     async Task FetchData()
     {
         Console.WriteLine("Fetching data...");
+        //UserManager 
         _items = Map(await UserManager.Users.AsNoTracking().ToListAsync()).ToList();
     }
 

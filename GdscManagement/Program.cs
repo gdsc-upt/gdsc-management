@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using GdscManagement.Areas.Identity;
 using GdscManagement.Common;
+using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Data;
 using GdscManagement.Services;
@@ -24,7 +25,7 @@ services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connect
 services.AddDatabaseDeveloperPageExceptionFilter();
 
 var identityBuilder = services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true);
-identityBuilder.AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+identityBuilder.AddRoles<Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 services.AddRazorPages();
 services.AddServerSideBlazor();
