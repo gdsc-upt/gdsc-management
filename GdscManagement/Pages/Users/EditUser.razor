@@ -3,6 +3,7 @@
 @using GdscManagement.Features.Users
 @using GdscManagement.Pages.Users.Components
 @using Microsoft.EntityFrameworkCore
+@using GdscManagement.Common.Features.Users
 @inherits GdscManagement.Pages.Shared.BaseComponent
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
@@ -12,6 +13,23 @@
 @if (Model is not null)
 {
     <AddEditUserForm Model="@Model" />
+    <MudSelect T="string" @bind-Value="currentRole"  Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var role in RoleManager.Roles.Select(r=>r.Name).ToList())
+        {
+            <MudSelectItem Value="@(role)"/>
+
+        }
+
+    </MudSelect>
+    <MudButton
+        OnClick="()=>UserManager.AddToRoleAsync(Model, currentRole)"
+        Variant="Variant.Filled"
+        StartIcon="fa-solid fa-circle-check"
+        IconColor="Color.Surface"
+        Color="Color.Success"
+        Class="ml-auto">
+        Update
+    </MudButton>
 }
 
 @code {
@@ -20,15 +38,23 @@
     public string Id { get; set; } = null!;
 
     private User? Model { get; set; }
-
+    
+    private string currentRole { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Model = await UserManager.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
 
         if (Model is null)
-        {
+        {    
             Snackbar.Add("User not found", Severity.Error);
             NavigationManager.NavigateTo(UserRoutes.Main);
+            return;
+        }
+        var roles = await UserManager.GetRolesAsync(Model);
+        if (roles.Count>0)
+        {
+
+            currentRole = roles.First();
         }
     }
 
