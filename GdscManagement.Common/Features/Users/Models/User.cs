@@ -13,6 +13,8 @@ public class User : IdentityUser, IModel
     [PersonalData] public virtual string? FirstName { get; set; }
     [PersonalData] public virtual string? LastName { get; set; }
     [PersonalData] public virtual string? Avatar { get; set; }
+    
+    
 
     public override string ToString()
     {

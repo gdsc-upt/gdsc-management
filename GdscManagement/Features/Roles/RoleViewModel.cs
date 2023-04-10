@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using GdscManagement.Common.Features.Users;
 using GdscManagement.Features.Base;
 using GdscManagement.Utilities.Attributes;
 using Microsoft.AspNetCore.Identity;
 
 namespace GdscManagement.Features.Roles;
 
-public class RoleViewModel: IdentityRole, IViewModel
+public class RoleViewModel: Role, IViewModel
 {
     [Display(Name = "Identifier")]
     [DisplayExtras(ReadOnly = true, HideOnTable = true)]
@@ -18,4 +19,6 @@ public class RoleViewModel: IdentityRole, IViewModel
     [Display(Name = "Updated")]
     [DisplayExtras(ReadOnly = true)]
     public DateTime Updated { get; set; }
+    
+    
 }

@@ -61,6 +61,7 @@ public abstract class BaseComponent : OwningComponentBase
     private  SignInManager<User>? _signInManager;
 
     private UserManager<User>? _userManager;
+    private RoleManager<Role>? _roleManager;
     protected ClaimsPrincipal? ClaimsPrincipal { get; private set; }
     protected User? User { get; private set; }
     protected bool IsAuthenticated { get; private set; }
@@ -93,13 +94,26 @@ public abstract class BaseComponent : OwningComponentBase
             return _userManager ??= ScopedServices.GetRequiredService<UserManager<User>>();
         }
     }
+    protected RoleManager<Role> RoleManager
+    {
+        get
+        {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+
+            // We cache this because we don't know the lifetime. We have to assume that it could be transient.
+            return _roleManager ??= ScopedServices.GetRequiredService<RoleManager<Role>>();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         ClaimsPrincipal = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
         IsAuthenticated = ClaimsPrincipal.Identity?.IsAuthenticated ?? false;
-        IsAdmin = ClaimsPrincipal.IsInRole(Roles.Admin);
+        IsAdmin = ClaimsPrincipal.IsInRole(Common.Features.Users.Roles.Admin);
         var user = await UserManager.GetUserAsync(ClaimsPrincipal);
         if (user is not null)
         {

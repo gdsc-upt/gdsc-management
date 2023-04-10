@@ -1,0 +1,156 @@
+﻿@using Microsoft.AspNetCore.Components
+@using GdscManagement.Features.Roles
+@using GdscManagement.Utilities
+@using Microsoft.EntityFrameworkCore
+@using GdscManagement.Features.Base
+@using Microsoft.AspNetCore.Identity
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Features.Roles
+@using GdscManagement.Utilities.Extensions
+@using GdscManagement.Pages.Shared.Tables
+@inherits OwningComponentBase<RoleManager<GdscManagement.Common.Features.Users.Role> >
+@inject ViewModelHelper<RoleViewModel> Helper
+@inject NavigationManager Navigation
+
+<MudTable
+    Class="mt-5"
+    Loading="Loading"
+    SelectedItems="SelectedItems"
+    SelectedItemsChanged="SelectedItemsChanged"
+    T="RoleViewModel"
+    MultiSelection="true"
+    Items="Items"
+    RowClass="pointer"
+    OnRowClick="NavigateTo"
+    Hover="true"
+    Filter="element => FilterFunc(element, _searchString)"
+    Breakpoint="Breakpoint.Sm"
+    LoadingProgressColor="Color.Info">
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Users</MudText>
+
+        <MudSpacer/>
+
+        <MudTextField
+            @bind-Value="_searchString"
+            Placeholder="Search"
+            Adornment="Adornment.Start"
+            AdornmentIcon="fa-solid fa-magnifying-glass"
+            AdornmentColor="Color.Tertiary"
+            IconSize="Size.Small"
+            Clearable="true"
+            Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+
+    <HeaderContent>
+        @foreach (var property in typeof(RoleViewModel).GetProperties())
+        {
+            var extrasInfo = property.GetExtrasInfo();
+            if (property.IsHidden() || extrasInfo.HideOnTable)
+            {
+                continue;
+            }
+
+            <TableHeader Property="property" />
+        }
+
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        @foreach (var property in context.GetType().GetProperties())
+        {
+            var extrasInfo = property.GetExtrasInfo();
+            if (property.IsHidden() || extrasInfo.HideOnTable)
+            {
+                continue;
+            }
+
+            <TableData Property="property" ViewModel="context"/>
+        }
+
+        @* <MudTd DataLabel="@Helper.GetLabel(x => x.Type)"> *@
+        @* <MudTooltip Color="@context.Type.GetColor()" Text="@context.Type.GetDescription()" Arrow="true"> *@
+        @* <MudText Color="@context.Type.GetColor()">@context.Type.GetName()</MudText> *@
+        @* </MudTooltip> *@
+        @* </MudTd> *@
+        <MudTd>
+            <MudButton
+                IconColor="Color.Error"
+                StartIcon="fa-solid fa-trash"
+                OnClick="() => Delete(context)">
+            </MudButton>
+        </MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager/>
+    </PagerContent>
+
+    <LoadingContent>
+        <MudText>Fetching data...</MudText>
+    </LoadingContent>
+
+    <NoRecordsContent>
+        <MudText>There are no records to display.</MudText>
+    </NoRecordsContent>
+</MudTable>
+
+@code {
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LoadingChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<HashSet<RoleViewModel>> SelectedItemsChanged { get; set; }
+
+    [Parameter]
+    public HashSet<RoleViewModel> SelectedItems { get; set; } = null!;
+
+    [Parameter]
+    public List<RoleViewModel> Items { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<string> OnActionExecuted { get; set; }
+
+    string _searchString = "";
+
+    async Task Delete(IViewModel context)
+    {
+        await SetLoading(true);
+        var user = await Service.Roles.FirstOrDefaultAsync(u => u.Id == context.Id);
+        if (user is null)
+        {
+            return;
+        }
+        await Service.DeleteAsync(user);
+        await OnActionExecuted.InvokeAsync("delete");
+        await SetLoading(false);
+    }
+
+    void NavigateTo(TableRowClickEventArgs<RoleViewModel> tableRowClick)
+    {
+        Navigation.NavigateTo($"/roles/{tableRowClick.Item.Id}/");
+    }
+
+    static bool FilterFunc(RoleViewModel element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false)
+            return true;
+            return false;
+    }
+
+    async Task SetLoading(bool loading)
+    {
+        Loading = loading;
+        await LoadingChanged.InvokeAsync(loading);
+    }
+
+}

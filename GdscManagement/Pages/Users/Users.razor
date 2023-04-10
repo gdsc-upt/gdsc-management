@@ -1,10 +1,11 @@
-@attribute [Route(UserRoutes.Main)]
+@attribute [Microsoft.AspNetCore.Components.Route(UserRoutes.Main)]
 @using GdscManagement.Common.Features.Users
 @using GdscManagement.Features.Users
 @using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Pages.Users.Components
 @using GdscManagement.Pages.Shared.Tables
 @using GdscManagement.Utilities.Extensions
+@using Microsoft.AspNetCore.Mvc
 @using Microsoft.EntityFrameworkCore
 @inherits GdscManagement.Pages.Shared.BaseComponent<User, UserViewModel>
 
@@ -50,7 +51,14 @@
     async Task FetchData()
     {
         Console.WriteLine("Fetching data...");
+        //UserManager 
         _items = Map(await UserManager.Users.AsNoTracking().ToListAsync()).ToList();
+    }
+
+    Task AddRole(User user, string role)
+    {
+        return UserManager.AddToRoleAsync(user, role);
+        
     }
 
 }

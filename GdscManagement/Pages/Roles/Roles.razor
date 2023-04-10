@@ -1,0 +1,64 @@
+﻿@page "/roles"
+@using GdscManagement.Features.Roles
+@using GdscManagement.Pages.Shared.Tables
+@using Microsoft.AspNetCore.Identity
+@using GdscManagement.Common.Features.Users
+@using GdscManagement.Pages.Roles.Components
+@using GdscManagement.Utilities.Extensions
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inherits GdscManagement.Pages.Shared.BaseComponent<Role, RoleViewModel>
+<h3>Roles</h3>
+<h1> Hello </h1>
+
+<PageTitle>Roles</PageTitle>
+
+<TableActions TViewModel="RoleViewModel" TModel="Role" SelectedItems="@_selected"></TableActions>
+
+<RolesTable Loading="_loading" OnActionExecuted="OnActionExecuted" Items="_items" @bind-SelectedItems="_selected"/>
+
+<TableActions TModel="Role" OnActionExecuted="OnActionExecuted" TViewModel="RoleViewModel" SelectedItems="@_selected"></TableActions>
+
+<AuthorizeView Roles="@Common.Features.Users.Roles.Admin">
+    <MudPaper Elevation="0" Class="my-7">
+      <AddEditUserForm OnValidSubmit="FetchData"></AddEditUserForm>
+    </MudPaper>
+</AuthorizeView>
+
+@code {
+
+    private HashSet<RoleViewModel> _selected = new();
+    bool _loading;
+    List<RoleViewModel> _items = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await FetchData();
+        _loading = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Navigation.NavigateToFragment(JsRuntime);
+        }
+    }
+
+    Task OnActionExecuted(string action)
+    {
+        return action == "delete" ? FetchData() : Task.CompletedTask;
+    }
+
+    async Task FetchData()
+    {
+        Console.WriteLine("Fetching data...");
+    //UserManager 
+        _items = Map(await RoleManager.Roles.AsNoTracking().ToListAsync()).ToList();
+    }
+}  
+
+
+
+//add EditRole 

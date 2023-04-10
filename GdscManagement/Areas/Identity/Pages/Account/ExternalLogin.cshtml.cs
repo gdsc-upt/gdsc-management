@@ -17,14 +17,14 @@ public class ExternalLogin : PageModel
 {
     private const string Provider = "Google";
     private readonly IUserEmailStore<User> _emailStore;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     private readonly IUserStore<User> _userStore;
 
 
     public ExternalLogin(SignInManager<User> signInManager, UserManager<User> userManager,
-        RoleManager<IdentityRole> roleManager, IUserStore<User> userStore,
+        RoleManager<Role> roleManager, IUserStore<User> userStore,
         IEmailSender emailSender)
     {
         _signInManager = signInManager;
@@ -151,7 +151,7 @@ public class ExternalLogin : PageModel
     {
         if (!await _roleManager.RoleExistsAsync(Roles.Admin))
         {
-            await _roleManager.CreateAsync(new IdentityRole(Roles.Admin));
+            await _roleManager.CreateAsync(new Role(Roles.Admin));
         }
 
         await _userManager.AddToRoleAsync(user, Roles.Admin);
