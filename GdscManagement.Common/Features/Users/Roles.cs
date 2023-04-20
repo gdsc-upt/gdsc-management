@@ -9,7 +9,6 @@ public readonly struct Roles
     public const string User = "User";
 }
 
-
 public class Role : IdentityRole, IModel
 {   public Role(string roleName) : base(roleName)
     {

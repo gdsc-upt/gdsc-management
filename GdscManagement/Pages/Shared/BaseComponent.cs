@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using AutoMapper;
 using GdscManagement.Common.Features.Base;
+using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Common.Repository;
