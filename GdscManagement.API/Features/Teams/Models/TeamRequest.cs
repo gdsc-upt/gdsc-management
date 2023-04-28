@@ -8,5 +8,4 @@ public class TeamRequest
     
     [Required]public string Name { get; set; }
     
-    [Required]public int MembersCount { get; set; }
 }

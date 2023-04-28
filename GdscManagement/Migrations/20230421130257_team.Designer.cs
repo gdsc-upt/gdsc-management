@@ -3,6 +3,7 @@ using System;
 using GdscManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GdscManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230421130257_team")]
+    partial class team
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +41,6 @@ namespace GdscManagement.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TeamLeadId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
@@ -46,7 +48,9 @@ namespace GdscManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.HasIndex("TeamLeadId");
+
+                    b.ToTable("AspNetTeams");
                 });
 
             modelBuilder.Entity("GdscManagement.Common.Features.Users.Models.User", b =>
@@ -268,6 +272,15 @@ namespace GdscManagement.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("GdscManagement.Common.Features.Teams.Models.Team", b =>
+                {
+                    b.HasOne("GdscManagement.Common.Features.Users.Models.User", "TeamLead")
+                        .WithMany()
+                        .HasForeignKey("TeamLeadId");
+
+                    b.Navigation("TeamLead");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

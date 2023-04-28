@@ -5,7 +5,7 @@ namespace GdscManagement.Common.Features.Teams.Models;
 
 public class Team : Model
 {
-    public User TeamLead { get; set; }
+    public string TeamLeadId { get; set; }
     
     public string Name { get; set; }
     

@@ -1,6 +1,8 @@
 using AutoMapper;
+using GdscManagement.API.Features.Projects.Models;
 using GdscManagement.API.Features.Teams.Models;
 using GdscManagement.API.Features.Users.Models;
+using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users.Models;
 
@@ -13,6 +15,11 @@ public class ApiMappingProfiles : Profile
         CreateMap<User, UserResponse>().ReverseMap();
         
         CreateMap<Team, TeamResponse>().ReverseMap();
+        
         CreateMap<Team, TeamRequest>().ReverseMap();
+        
+        CreateMap<Project, ProjectResponse>().ReverseMap();
+        
+        CreateMap<Project, ProjectRequest>().ReverseMap();
     }
 }

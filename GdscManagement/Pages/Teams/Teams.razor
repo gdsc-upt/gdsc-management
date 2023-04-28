@@ -1,1 +1,88 @@
-﻿
+﻿@using GdscManagement.Common.Repository
+@using GdscManagement.Common.Features.Teams.Models
+@attribute [Route("/teams")]
+//ruta (endpoint in pagina)
+@inject IRepository<Team> Repository
+
+<div> Teams: @_teams.Count</div>
+
+@* //iteram si afisam numele fiecarei echipe *@
+@foreach (var team in _teams)
+{
+    <div style="padding-bottom: 10px"> @team.Team.Name </div>
+}
+
+
+<MudTable Items="@_teams" Hover="true" Breakpoint="Breakpoint.Sm">
+    <ColGroup>
+        <col style="width:300px;"/>
+        <col style="width:100px;"/>
+        <col/> @*gruparea coloanelor*@
+        <col style="width:100px;"/>
+    </ColGroup>
+
+    <HeaderContent>
+        <MudTh> Name</MudTh>
+        <MudTh>Members Count</MudTh>
+        <MudTh>Created </MudTh>
+        <MudTh>Updated</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd>
+            <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@(() => ShowBtnPress(context.Team.Id))"> @context.Team.Name </MudButton>
+        </MudTd> @*context e teams de mai susr*@
+        <MudTd DataLabel="Nr">@context.Team.MembersCount</MudTd>
+        <MudTd DataLabel="Name">@context.Team.Created</MudTd>
+        <MudTd DataLabel="Age">@context.Team.Updated</MudTd>
+    </RowTemplate>
+    <ChildRowContent>
+        @if (context.ShowDetails)
+        {
+            <MudTr>
+                <td colspan="4">
+                    <MudCard Elevation="0">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.body1">Address Details for <strong>@context.Team.Name</strong></MudText>
+                                <MudText> @context.Team.TeamLeadId </MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Class="pa-0">
+                            @context.Team.Name
+                        </MudCardContent>
+                    </MudCard>
+                </td>
+            </MudTr>
+        }
+    </ChildRowContent>
+</MudTable>
+
+@code
+{
+    public class ViewModel
+    {
+        public Team Team { get; set; }
+        public bool ShowDetails { get; set; }
+    }
+
+    private void ShowBtnPress(string nr)
+    {
+        var tmpPerson = _teams.First(f => f.Team.Id == nr);
+        tmpPerson.ShowDetails = !tmpPerson.ShowDetails;
+    }
+}
+
+@code{
+    private List<ViewModel> _teams = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _teams = (await Repository.GetAsync()).Select(t => new ViewModel() { Team = t, ShowDetails = false }).ToList();
+
+        Console.WriteLine(_teams.Count()); //afisam lista de echipe(in consola)
+        await base.OnInitializedAsync();
+    }
+
+}

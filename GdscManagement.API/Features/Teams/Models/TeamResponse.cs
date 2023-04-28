@@ -4,7 +4,7 @@ namespace GdscManagement.API.Features.Teams.Models;
 
 public class TeamResponse
 {
-    public string TeamLeadId { get; set; }
+    public string TeamLeadId { get; set; } 
     
     public string Name { get; set; }
     
