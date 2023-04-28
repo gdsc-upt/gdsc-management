@@ -4,6 +4,7 @@ using GdscManagement.API.Features.Teams.Models;
 using GdscManagement.API.Features.Users.Models;
 using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
+using GdscManagement.API.Features.UsersProfile.Models;
 using GdscManagement.Common.Features.Users.Models;
 
 namespace GdscManagement.API;
@@ -21,5 +22,7 @@ public class ApiMappingProfiles : Profile
         CreateMap<Project, ProjectResponse>().ReverseMap();
         
         CreateMap<Project, ProjectRequest>().ReverseMap();
+        CreateMap<UserProfile, UserProfileResponse>().ReverseMap();
+        CreateMap<UserProfile, UserProfileRequest>().ReverseMap();
     }
 }

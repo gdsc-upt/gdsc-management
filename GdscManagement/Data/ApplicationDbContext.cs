@@ -1,5 +1,6 @@
-﻿using GdscManagement.Common.Features.Projects.Models;
+using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
+using GdscManagement.Common.Features.UserProfile.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,4 +16,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Team> Teams { get; set; }
     
     public DbSet<Project> Projects { get; set; }
+    {
+    }
+
+    public DbSet<UserProfile> AspNetUserProfile { get; set; }
 }
