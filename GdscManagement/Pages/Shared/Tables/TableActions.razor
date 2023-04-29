@@ -5,7 +5,7 @@
 @using GdscManagement.Common.Features.Base
 @typeparam TViewModel where TViewModel : IViewModel
 @typeparam TModel where TModel : IModel
-@inject IRepository<TModel> Repo
+@inject IBaseRepository<TModel> Repo
 
 <MudPaper Class="pa-4 mt-5 d-flex">
     <AuthorizeView Roles="@Roles.Admin">

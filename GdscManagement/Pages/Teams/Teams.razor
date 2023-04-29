@@ -2,7 +2,7 @@
 @using GdscManagement.Common.Features.Teams.Models
 @attribute [Route("/teams")]
 //ruta (endpoint in pagina)
-@inject IRepository<Team> Repository
+@inject IBaseRepository<Team> BaseRepository
 
 <div> Teams: @_teams.Count</div>
 
@@ -45,7 +45,7 @@
                         <MudCardHeader>
                             <CardHeaderContent>
                                 <MudText Typo="Typo.body1">Address Details for <strong>@context.Team.Name</strong></MudText>
-                                <MudText> @context.Team.TeamLeadId </MudText>
+                                <MudText> @context.Team.TeamLead </MudText>
                             </CardHeaderContent>
                         </MudCardHeader>
                         <MudCardContent Class="pa-0">
@@ -79,10 +79,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _teams = (await Repository.GetAsync()).Select(t => new ViewModel() { Team = t, ShowDetails = false }).ToList();
+        _teams = (await BaseRepository.GetAsync()).Select(t => new ViewModel() { Team = t, ShowDetails = false }).ToList();
 
         Console.WriteLine(_teams.Count()); //afisam lista de echipe(in consola)
         await base.OnInitializedAsync();
     }
 
-}
+} 
+
+
+
+
+//Team Descriptions, care sa fie afisat pe butonul din tabel,
+//lista de projects, pe modelul de projects o lista de echipe

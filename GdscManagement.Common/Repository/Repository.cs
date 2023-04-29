@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GdscManagement.Common.Repository;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class, IModel
+public class Repository<T> : IRepository<T> where T : class, IModel
 {
     private readonly DbContext _context;
 
-    public BaseRepository(DbContext context)
+    public Repository(DbContext context)
     {
         _context = context;
         DbSet = _context.Set<T>();

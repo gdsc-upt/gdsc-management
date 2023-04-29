@@ -26,7 +26,7 @@ public abstract class BaseComponent<TModel, TViewModel> : BaseComponent
 }
 
 public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponent<TService>
-    where TService : class, IRepository<IModel> where TModel : IModel
+    where TService : class, IBaseRepository<IModel> where TModel : IModel
 {
     [Inject] protected IMapper Mapper { get; set; } = default!;
     protected TModel Map(TViewModel viewModel) => Mapper.Map<TModel>(viewModel);
@@ -35,7 +35,7 @@ public abstract class BaseComponent<TService, TModel, TViewModel> : BaseComponen
     protected IEnumerable<TViewModel> Map(IEnumerable<TModel> model) => Mapper.Map<IEnumerable<TViewModel>>(model);
 }
 
-public abstract class BaseComponent<TService> : BaseComponent where TService : class, IRepository<IModel>
+public abstract class BaseComponent<TService> : BaseComponent where TService : class, IBaseRepository<IModel>
 {
     private TService? _repo;
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GdscManagement.API.Features.Teams
 {
@@ -53,7 +54,7 @@ namespace GdscManagement.API.Features.Teams
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<TeamResponse>>> GetTeams()
         {
-            var teams = await _teamRepository.GetAsync();
+            var teams = await _teamRepository.DbSet.Include(q => q.TeamLead).ToListAsync();
             //var teamResponses = _mapper.Map<IEnumerable<TeamResponse>>(teams);
 
             return Ok(teams.Select(
