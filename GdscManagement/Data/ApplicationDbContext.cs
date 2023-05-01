@@ -1,4 +1,5 @@
-﻿using GdscManagement.Common.Features.Projects.Models;
+﻿using GdscManagement.Common.Features.Clients.Models;
+using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
@@ -20,4 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Participants> Participants { get; set; }
 
     public DbSet<Workshop> Workshops { get; set; }
+    
+    public DbSet<Client> Clients { get; set; }
 }
