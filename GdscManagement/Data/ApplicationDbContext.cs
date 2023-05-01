@@ -2,6 +2,7 @@
 using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
+using GdscManagement.Common.Features.Workshops.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,4 +16,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Team> Teams { get; set; }
     
     public DbSet<Project> Projects { get; set; }
+    
+    public DbSet<Participants> Participants { get; set; }
+
+    public DbSet<Workshop> Workshops { get; set; }
 }

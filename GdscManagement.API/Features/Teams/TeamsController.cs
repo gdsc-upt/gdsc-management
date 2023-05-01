@@ -40,7 +40,7 @@ namespace GdscManagement.API.Features.Teams
             }
 
             var team = _mapper.Map<Team>(request);
-
+            team.TeamLead = teamLead;  // 
             var addedTeam = await _teamRepository.AddAsync(team);
             var teamResponse = _mapper.Map<TeamResponse>(addedTeam);
             
@@ -139,7 +139,7 @@ namespace GdscManagement.API.Features.Teams
                 return BadRequest($"User with id '{teamLeadId}' does not exist.");
             }
 
-            
+            team.TeamLead = teamLead;
 
             var result = await _teamRepository.UpdateAsync(team);
             if (result is null)
