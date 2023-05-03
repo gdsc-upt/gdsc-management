@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GdscManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class UserProfile : Migration
+    public partial class UserPaddedteamfield : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace GdscManagement.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
+                    TeamId = table.Column<string>(type: "text", nullable: true),
                     FacebookLink = table.Column<string>(type: "text", nullable: true),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Birthday = table.Column<DateOnly>(type: "date", nullable: false),
@@ -31,7 +32,17 @@ namespace GdscManagement.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUserProfile_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserProfile_TeamId",
+                table: "AspNetUserProfile",
+                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserProfile_UserId",

@@ -1,13 +1,14 @@
 ﻿using GdscManagement.API.Features.Base;
+using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users.Models;
 
-namespace GdscManagement.API.Features.UsersProfile.Models;
+namespace GdscManagement.API.Features.UsersProfile;
 
 public class UserProfileResponse : ModelResponse
 {
-    public string UserId { get; set; }
+    public User? User { get; set; }
 
-    // TODO: add team field
+    public Team? Team { get; set; }
     
     public string? FacebookLink { get; set; }
 

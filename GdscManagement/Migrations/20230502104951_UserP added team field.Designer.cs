@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GdscManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230426154556_User Profile")]
-    partial class UserProfile
+    [Migration("20230502104951_UserP added team field")]
+    partial class UserPaddedteamfield
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,34 +25,67 @@ namespace GdscManagement.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GdscManagement.Common.Features.UserProfile.Models.UserProfile", b =>
+            modelBuilder.Entity("GdscManagement.Common.Features.Projects.Models.Project", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Birthday")
-                        .HasColumnType("date");
+                    b.Property<string>("Client")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("FacebookLink")
+                    b.Property<string[]>("Developers")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("ManagerId")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("GdscManagement.Common.Features.Teams.Models.Team", b =>
+                {
+                    b.Property<string>("Id")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("MembersCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TeamLeadId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TeamLeadId");
 
-                    b.ToTable("AspNetUserProfile");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("GdscManagement.Common.Features.Users.Models.User", b =>
@@ -166,6 +199,41 @@ namespace GdscManagement.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
+            modelBuilder.Entity("GdscManagement.Common.Features.UsersProfile.Models.UserProfile", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("Birthday")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FacebookLink")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TeamId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserProfile");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -276,11 +344,26 @@ namespace GdscManagement.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GdscManagement.Common.Features.UserProfile.Models.UserProfile", b =>
+            modelBuilder.Entity("GdscManagement.Common.Features.Teams.Models.Team", b =>
                 {
+                    b.HasOne("GdscManagement.Common.Features.Users.Models.User", "TeamLead")
+                        .WithMany()
+                        .HasForeignKey("TeamLeadId");
+
+                    b.Navigation("TeamLead");
+                });
+
+            modelBuilder.Entity("GdscManagement.Common.Features.UsersProfile.Models.UserProfile", b =>
+                {
+                    b.HasOne("GdscManagement.Common.Features.Teams.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
                     b.HasOne("GdscManagement.Common.Features.Users.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Team");
 
                     b.Navigation("User");
                 });
