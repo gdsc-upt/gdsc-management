@@ -48,6 +48,7 @@ public class UserProfileController : ControllerBase
             return NotFound($"User with id '{request.TeamId}' does not exist.");
         }
 
+        team.MembersCount++;
         var userProfile = _mapper.Map<UserProfile>(request);
         userProfile.User = user;
         userProfile.Team = team;
