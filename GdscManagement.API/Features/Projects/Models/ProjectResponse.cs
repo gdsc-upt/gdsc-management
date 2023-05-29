@@ -11,6 +11,6 @@ public class ProjectResponse
     public ProjectStatuses Status { get; set; } // 0 1 sau 2
     
     public string? Client { get; set; }
-    
-    public string[]?  Developers { get; set; }
+
+    public List<Developers> Developers { get; set; } = new List<Developers>();
 }
