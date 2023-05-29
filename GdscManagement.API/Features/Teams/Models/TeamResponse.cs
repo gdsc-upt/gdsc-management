@@ -10,4 +10,6 @@ public class TeamResponse
     public string Name { get; set; }
     
     public int MembersCount { get; set; }
+    
+    public string Descriptions { get; set; }
 }

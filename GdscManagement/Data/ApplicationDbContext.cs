@@ -17,6 +17,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     
     public DbSet<Project> Projects { get; set; }
     
+    public DbSet <Developers> Developers { get; set; }
+    
     public DbSet<Participants> Participants { get; set; }
 
     public DbSet<Workshop> Workshops { get; set; }

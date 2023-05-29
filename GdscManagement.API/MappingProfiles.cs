@@ -23,6 +23,10 @@ public class ApiMappingProfiles : Profile
         CreateMap<Project, ProjectResponse>().ReverseMap();
         
         CreateMap<Project, ProjectRequest>().ReverseMap();
+        
+        CreateMap<Developers, DevelopersRequest>().ReverseMap();
+        
+        CreateMap<Developers, DevelopersResponse>().ReverseMap();
 
         CreateMap<Workshop, WorkshopResponse>().ReverseMap();
 
