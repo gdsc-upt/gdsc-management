@@ -1,8 +1,9 @@
-﻿using GdscManagement.Common.Features.Projects.Models;
+using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Common.Features.Workshops.Models;
+using GdscManagement.Common.Features.UsersProfile.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,4 +23,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Participants> Participants { get; set; }
 
     public DbSet<Workshop> Workshops { get; set; }
+
+    public DbSet<UserProfile> AspNetUserProfile { get; set; }
 }
