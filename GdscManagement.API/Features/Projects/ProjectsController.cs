@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using GdscManagement.API.Features.Projects.Models;
 using GdscManagement.API.Features.Teams.Models;
 using GdscManagement.Common.Features.Projects.Models;
@@ -131,7 +132,7 @@ public class ProjectsController : ControllerBase
     }
 
 
-    [HttpPut("{id}/manager")]
+    [HttpPatch("{id}/manager")]
     public async Task<ActionResult<ProjectResponse>> ChangeManager(string id, string ManagerId)
     {
         var project = await _projectRepository.GetAsync(id);
@@ -162,7 +163,7 @@ public class ProjectsController : ControllerBase
     }
 
 
-    [HttpPut("{id}/status")]
+    [HttpPatch("{id}/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -197,6 +198,49 @@ public class ProjectsController : ControllerBase
 
         return Ok(projects);
     }
+
+
+    [HttpPatch("adddeveloper")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ProjectResponse>> AddDeveloper(DevelopersRequest request)
+    {
+
+        var project = await _projectRepository.DbSet.Include(q=>q.Developers).FirstOrDefaultAsync(p=>p.Id==request.ProjectId);
+        if (project is null)
+            return BadRequest();
+
+        var user = await _userRepository.GetAsync(request.UserId);
+        if (user is null)
+            return BadRequest();
+
+        project.Developers.Add(user);
+        await _projectRepository.UpdateAsync(project);
+
+        return Ok(project);
+    }
     
     
+    [HttpDelete("removedev")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ProjectResponse>> RemoveDeveloper(DevelopersRequest request)
+    {
+        var project = await _projectRepository.DbSet.Include(q=>q.Developers).FirstOrDefaultAsync(p=>p.Id==request.ProjectId);
+      
+        if (project is null)
+            return BadRequest();
+
+        var user = await _userRepository.GetAsync(request.UserId);
+        if (user is null)
+            return BadRequest();
+
+        project.Developers.Remove(user);
+        await _projectRepository.UpdateAsync(project);
+
+        return Ok(project);
+    }
+
 }

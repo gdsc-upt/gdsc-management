@@ -160,7 +160,7 @@ public class WorkshopController : ControllerBase
     [HttpPost("participant")]
     public async Task<ActionResult<WorkshopResponse>> AddParticipant(ParticipantRequest request)
     {
-        var workshop = await _workshopRepository.GetAsync(request.WorkshopId);
+        var workshop = await _workshopRepository.DbSet.Include(q=>q.Participants).FirstOrDefaultAsync(p=>p.Id==request.WorkshopId);
         if (workshop == null)
             return NotFound($"Workshop with id '{request.WorkshopId}' doesn't exist.");
 
