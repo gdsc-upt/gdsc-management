@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using GdscManagement.Common.Features.Base;
+using GdscManagement.Common.Features.Projects.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GdscManagement.Common.Repository;
@@ -19,7 +20,7 @@ public class Repository<T> : IRepository<T> where T : class, IModel
     public async Task<T> AddAsync([NotNull] T entity)
     {
         var added = (await DbSet.AddAsync(entity)).Entity;
-        await Save();
+        await SaveAsync();
 
         return added;
     }
@@ -45,7 +46,7 @@ public class Repository<T> : IRepository<T> where T : class, IModel
         CheckUpdateObject(entity, newEntity);
         entity.Updated = DateTime.UtcNow;
 
-        await Save();
+        await SaveAsync();
 
         return DbSet.First(e => e.Id == id);
     }
@@ -60,7 +61,7 @@ public class Repository<T> : IRepository<T> where T : class, IModel
 
         entity.Updated = DateTime.UtcNow;
 
-        await Save();
+        await SaveAsync();
 
         return DbSet.First(e => e.Id == entity.Id);
     }
@@ -75,7 +76,7 @@ public class Repository<T> : IRepository<T> where T : class, IModel
         }
 
         var removed = DbSet.Remove(entity).Entity;
-        await Save();
+        await SaveAsync();
 
         return removed;
     }
@@ -85,14 +86,14 @@ public class Repository<T> : IRepository<T> where T : class, IModel
         var entities = await DbSet.Where(item => ids.Contains(item.Id)).ToListAsync();
         entities.ForEach(entity => DbSet.Remove(entity));
 
-        await Save();
+        await SaveAsync();
 
         return entities;
     }
 
-    private Task<int> Save()
+    public async Task SaveAsync()
     {
-        return _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     private static void CheckUpdateObject(T original, object updated)

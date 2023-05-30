@@ -13,4 +13,6 @@ public class ProjectResponse
     public string? Client { get; set; }
 
     public List<Developers> Developers { get; set; } = new List<Developers>();
+    
+    public string id { get; set; }
 }
