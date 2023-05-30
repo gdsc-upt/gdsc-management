@@ -14,14 +14,13 @@ public class WorkshopController : ControllerBase
 {
     private readonly IRepository<Workshop> _workshopRepository;
     private readonly IRepository<User> _userRepository;
-    private readonly IRepository<Participants> _participatsRepository;
     private readonly IMapper _mapper;
 
-    public WorkshopController(IRepository<Workshop> workshopRepository, IRepository<User> userRepository, IRepository<Participants> participatsRepository,IMapper mapper)
+    public WorkshopController(IRepository<Workshop> workshopRepository, IRepository<User> userRepository,
+        IMapper mapper)
     {
         _workshopRepository = workshopRepository;
         _userRepository = userRepository;
-        _participatsRepository = participatsRepository;
         _mapper = mapper;
     }
 
@@ -56,12 +55,13 @@ public class WorkshopController : ControllerBase
     {
         var workshop = await _workshopRepository.DbSet
             .Include(q => q.Trainer)
-            .Include(q=>q.Participants)
+            .Include(q => q.Participants)
             .FirstOrDefaultAsync(q => q.Id == id);
         if (workshop == null)
         {
             return NotFound($" Workshop with id '{id}' doesn't exist.");
         }
+
         return Ok(_mapper.Map<WorkshopResponse>(workshop));
     }
 
@@ -93,7 +93,7 @@ public class WorkshopController : ControllerBase
             return NotFound($" User with id '{id}' doesn't exist.");
         }
 
-        var updatedWorksop = _mapper.Map(request,workshop);
+        var updatedWorksop = _mapper.Map(request, workshop);
         var result = await _workshopRepository.UpdateAsync(updatedWorksop);
         if (result == null)
             return BadRequest();
@@ -161,9 +161,9 @@ public class WorkshopController : ControllerBase
     public async Task<ActionResult<WorkshopResponse>> AddParticipant(ParticipantRequest request)
     {
         var workshop = await _workshopRepository.GetAsync(request.WorkshopId);
-        if(workshop == null)
+        if (workshop == null)
             return NotFound($"Workshop with id '{request.WorkshopId}' doesn't exist.");
-        
+
         if (workshop.OccupiedSeates >= workshop.MaxCapacity)
             return BadRequest("Occupied seates bigger than maxcap.");
 
@@ -171,12 +171,12 @@ public class WorkshopController : ControllerBase
         if (user == null)
             return NotFound($"User with id '{request.UserId}' doesn't exist.");
 
-        workshop.Participants.Add(new Participants{Workshop = workshop, User = user});
+        workshop.Participants.Add(user);
         workshop.OccupiedSeates += 1;
 
         var result = await _workshopRepository.UpdateAsync(workshop);
 
-        if(result == null)
+        if (result == null)
             return BadRequest();
 
         var workshopResponse = _mapper.Map<WorkshopResponse>(result);
@@ -188,20 +188,18 @@ public class WorkshopController : ControllerBase
     {
         var workshop = await _workshopRepository.DbSet.Include(w => w.Participants)
             .FirstOrDefaultAsync(w => w.Id == id);
-        if(workshop==null)
+        if (workshop == null)
             return NotFound($"Workshop with id '{id}' doesn't exist.");
 
         var participant = workshop.Participants.FirstOrDefault(p => p.Id == participantId);
-        
-        if(participant==null)
+
+        if (participant == null)
             return NotFound($"Participant with id '{participantId}' doesn't exist.");
 
         workshop.Participants.Remove(participant);
         var result = await _workshopRepository.UpdateAsync(workshop);
-        if(result==null)
+        if (result == null)
             return BadRequest();
-
-        await _participatsRepository.DeleteAsync(participantId);
 
         var workshopResponse = _mapper.Map<WorkshopResponse>(result);
         return Ok(workshopResponse);

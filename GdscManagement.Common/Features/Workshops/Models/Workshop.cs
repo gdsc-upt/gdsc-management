@@ -6,6 +6,8 @@ namespace GdscManagement.Common.Features.Workshops.Models;
 
 public class Workshop : Model
 {
+    
+
     public User Trainer { get; set; }
     
     public string Topic { get; set; }
@@ -22,7 +24,7 @@ public class Workshop : Model
     
     public string Location { get; set; }
     
-    [JsonIgnore]public ICollection<Participants> Participants { get; set; }= new List<Participants>();
+    [JsonIgnore]public List<User> Participants { get; set; }
 
     public string Presentation { get; set; }
 }

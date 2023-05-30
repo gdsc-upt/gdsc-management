@@ -1,4 +1,5 @@
-﻿using GdscManagement.Common.Features.Users.Models;
+﻿using GdscManagement.API.Features.Users.Models;
+using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Common.Features.Workshops.Models;
 
 namespace GdscManagement.API.Features.Workshops.Models;
@@ -21,7 +22,7 @@ public class WorkshopResponse
     
     public string Location { get; set; }
     
-    public ICollection<Participants> Participants { get; set; }
+    public List<UserResponse> Participants { get; set; }
     
     public string Presentation { get; set; }
 }

@@ -14,14 +14,19 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {}
-    
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Project>().HasMany(p => p.Developers).WithMany();  
+        builder.Entity<Workshop>().HasMany(p => p.Participants).WithMany();  
+        base.OnModelCreating(builder);
+    }
+
     public DbSet<Team> Teams { get; set; }
     
     public DbSet<Project> Projects { get; set; }
     
-    public DbSet <Developers> Developers { get; set; }
-    
-    public DbSet<Participants> Participants { get; set; }
+   
 
     public DbSet<Workshop> Workshops { get; set; }
 

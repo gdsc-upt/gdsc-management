@@ -1,4 +1,5 @@
-﻿using GdscManagement.Common.Features.Projects.Models;
+﻿using GdscManagement.API.Features.Users.Models;
+using GdscManagement.Common.Features.Projects.Models;
 
 namespace GdscManagement.API.Features.Projects.Models;
 
@@ -12,7 +13,7 @@ public class ProjectResponse
     
     public string? Client { get; set; }
 
-    public List<Developers> Developers { get; set; } = new List<Developers>();
+    public List<UserResponse> Developers { get; set; } 
     
-    public string id { get; set; }
+    public string Id { get; set; } 
 }
