@@ -5,6 +5,7 @@ using GdscManagement.Common.Features.Users;
 using GdscManagement.Common.Features.Users.Models;
 using GdscManagement.Common.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,16 +35,19 @@ namespace GdscManagement.API.Features.Teams
         public async Task<ActionResult<TeamResponse>> AddTeam(TeamRequest request)
         {
             var teamLead = await _userRepository.GetAsync(request.TeamLeadId);
+            
             if (teamLead == null)
             {
                 return BadRequest($"User with id '{request.TeamLeadId}' does not exist.");
             }
 
             var team = _mapper.Map<Team>(request);
-
+            
+            team.TeamLead = teamLead;
+            
+            
             var addedTeam = await _teamRepository.AddAsync(team);
             var teamResponse = _mapper.Map<TeamResponse>(addedTeam);
-            
 
             return Ok(teamResponse);
         }
@@ -139,7 +143,7 @@ namespace GdscManagement.API.Features.Teams
                 return BadRequest($"User with id '{teamLeadId}' does not exist.");
             }
 
-            
+            team.TeamLead = teamLead;
 
             var result = await _teamRepository.UpdateAsync(team);
             if (result is null)

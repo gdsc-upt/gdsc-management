@@ -3,6 +3,7 @@ using System;
 using GdscManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GdscManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429173502_Workshops")]
+    partial class Workshops
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,46 +25,24 @@ namespace GdscManagement.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GdscManagement.Common.Features.Clients.Models.Client", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clients");
-                });
-
             modelBuilder.Entity("GdscManagement.Common.Features.Projects.Models.Project", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("ClientId")
+                    b.Property<string>("Client")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string[]>("Developers")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
                     b.Property<string>("ManagerId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
@@ -76,10 +57,6 @@ namespace GdscManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ManagerId");
-
                     b.ToTable("Projects");
                 });
 
@@ -90,10 +67,6 @@ namespace GdscManagement.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Descriptions")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("MembersCount")
                         .HasColumnType("integer");
@@ -226,25 +199,13 @@ namespace GdscManagement.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("GdscManagement.Common.Features.UsersProfile.Models.UserProfile", b =>
+            modelBuilder.Entity("GdscManagement.Common.Features.Workshops.Models.Participants", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Birthday")
-                        .HasColumnType("date");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("FacebookLink")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TeamId")
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
@@ -252,13 +213,16 @@ namespace GdscManagement.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("WorkshopId")
+                        .HasColumnType("text");
 
-                    b.HasIndex("TeamId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserProfile");
+                    b.HasIndex("WorkshopId");
+
+                    b.ToTable("Participants");
                 });
 
             modelBuilder.Entity("GdscManagement.Common.Features.Workshops.Models.Workshop", b =>
@@ -421,51 +385,6 @@ namespace GdscManagement.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ProjectUser", b =>
-                {
-                    b.Property<string>("DevelopersId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("text");
-
-                    b.HasKey("DevelopersId", "ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectUser");
-                });
-
-            modelBuilder.Entity("UserWorkshop", b =>
-                {
-                    b.Property<string>("ParticipantsId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("WorkshopId")
-                        .HasColumnType("text");
-
-                    b.HasKey("ParticipantsId", "WorkshopId");
-
-                    b.HasIndex("WorkshopId");
-
-                    b.ToTable("UserWorkshop");
-                });
-
-            modelBuilder.Entity("GdscManagement.Common.Features.Projects.Models.Project", b =>
-                {
-                    b.HasOne("GdscManagement.Common.Features.Clients.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
-
-                    b.HasOne("GdscManagement.Common.Features.Users.Models.User", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Manager");
-                });
-
             modelBuilder.Entity("GdscManagement.Common.Features.Teams.Models.Team", b =>
                 {
                     b.HasOne("GdscManagement.Common.Features.Users.Models.User", "TeamLead")
@@ -475,19 +394,19 @@ namespace GdscManagement.Migrations
                     b.Navigation("TeamLead");
                 });
 
-            modelBuilder.Entity("GdscManagement.Common.Features.UsersProfile.Models.UserProfile", b =>
+            modelBuilder.Entity("GdscManagement.Common.Features.Workshops.Models.Participants", b =>
                 {
-                    b.HasOne("GdscManagement.Common.Features.Teams.Models.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
-
                     b.HasOne("GdscManagement.Common.Features.Users.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Team");
+                    b.HasOne("GdscManagement.Common.Features.Workshops.Models.Workshop", "Workshop")
+                        .WithMany("Participants")
+                        .HasForeignKey("WorkshopId");
 
                     b.Navigation("User");
+
+                    b.Navigation("Workshop");
                 });
 
             modelBuilder.Entity("GdscManagement.Common.Features.Workshops.Models.Workshop", b =>
@@ -552,34 +471,9 @@ namespace GdscManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectUser", b =>
+            modelBuilder.Entity("GdscManagement.Common.Features.Workshops.Models.Workshop", b =>
                 {
-                    b.HasOne("GdscManagement.Common.Features.Users.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("DevelopersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GdscManagement.Common.Features.Projects.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UserWorkshop", b =>
-                {
-                    b.HasOne("GdscManagement.Common.Features.Users.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GdscManagement.Common.Features.Workshops.Models.Workshop", null)
-                        .WithMany()
-                        .HasForeignKey("WorkshopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

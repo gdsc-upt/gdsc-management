@@ -1,4 +1,6 @@
 ﻿using GdscManagement.Common.Features.Base;
+using GdscManagement.Common.Features.Clients.Models;
+using GdscManagement.Common.Features.Users.Models;
 
 namespace GdscManagement.Common.Features.Projects.Models;
 
@@ -8,12 +10,12 @@ public class Project : Model
 {
     public string Title { get; set; }
     
-    public string ManagerId { get; set; }
+    public User Manager { get; set; }
     
     public ProjectStatuses Status { get; set; }  //{Ongoing, Completed, NotStarted}
     
-    public string Client { get; set; }
+    public Client? Client { get; set; }
 
-    public string[]  Developers { get; set; }  //user ids
+    public List<User> Developers { get; set; } 
 }
     

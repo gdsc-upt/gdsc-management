@@ -8,4 +8,5 @@ public class TeamRequest
     
     [Required]public string Name { get; set; }
     
+    [Required]  public string Descriptions { get; set; }
 }
