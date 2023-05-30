@@ -48,7 +48,6 @@ namespace GdscManagement.API.Features.Teams
             
             var addedTeam = await _teamRepository.AddAsync(team);
             var teamResponse = _mapper.Map<TeamResponse>(addedTeam);
-            
 
             return Ok(teamResponse);
         }

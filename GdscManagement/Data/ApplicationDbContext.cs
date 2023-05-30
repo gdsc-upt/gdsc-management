@@ -1,3 +1,4 @@
+using GdscManagement.Common.Features.Clients.Models;
 using GdscManagement.Common.Features.Projects.Models;
 using GdscManagement.Common.Features.Teams.Models;
 using GdscManagement.Common.Features.Users;
@@ -25,4 +26,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Workshop> Workshops { get; set; }
 
     public DbSet<UserProfile> AspNetUserProfile { get; set; }
+    
+    public DbSet<Client> Clients { get; set; }
 }
