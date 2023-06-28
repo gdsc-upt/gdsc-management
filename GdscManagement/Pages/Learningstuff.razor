@@ -1,8 +1,59 @@
-﻿<h3>learningstuff</h3>
+﻿
 
-@page "/counter"
+@page "/Counter"
+@using GdscManagement.API.Features.Teams.Models 
+@using GdscManagement.API.Features.Teams
+@using GdscManagement.Common.Features.Teams.Models
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Common.Repository
+@*Dependency injections ? r*@ 
+@inject IRepository<Team> TeamRepository
+@inject IRepository<User> UserRepository
 
+@code {
+
+    public int  x=5;
+
+    public void Add()
+    {
+        this.x += 1;
+    }
+
+    public void LogWhenChanged(int count)
+    {
+        Console.WriteLine( "Count changed to " +count);
+        x = count;
+    }
+    
+
+
+} 
+
+@* butoanele is in navbar,  necesita libraria de blazor *@
+
+<div style ="    
+
+                 display: flex;
+                 flex-direction: column;
+                 align-items: center;
+                 height: 100%;
+                 justify-content: center;"> 
 <h1>Counter</h1>
+
+
+    <Number @bind-count="x">  </Number>  
+    @* sau *@ 
+   @* <Number count="x" countChanged= "count => x = count"> </Number>  *@
+    <Number count="x" countChanged= "LogWhenChanged"> </Number>  
+    @* leaga x de componenta number *@
+
+<button @onclick="Add"> Add </button>   @*  leaga metoda de buton*@
+
+</div>
+
+
+@* cum se paseaza metodele parinte-copil*@
+
 
 <p role="status">Current count: @currentCount</p>
 
@@ -15,4 +66,79 @@
     {
         currentCount++;
     }
+    
+    
+    @* new team button *@
+    
+    @code {
+
+        public TeamRequest TeamRequest { get; set; } = new();
+        public bool isSubmitted = false;
+
+        public async void Submit()
+        {
+
+
+            isSubmitted = true;
+            await Task.Delay(2000);
+            isSubmitted = false;
+            StateHasChanged(); 
+            @* return; pt testare, ca sa nu se salveze*@
+            @* ca sa dispara alerta dupa 2 secunde/ notifica componenta de blazor ca se modifica ceva *@
+            
+            var teamLead = await UserRepository.GetAsync(TeamRequest.TeamLeadId);
+            var team = new Team
+            {
+                Name = TeamRequest.Name,
+                Descriptions = TeamRequest.Descriptions,
+                TeamLead = teamLead
+            };
+
+            await TeamRepository.AddAsync(team);
+            
+            
+            Console.WriteLine(TeamRequest.TeamLeadId);
+            Console.WriteLine(TeamRequest.Name);
+            Console.WriteLine(TeamRequest.Descriptions);
+        }
+        
+
+
+    }
+    
+    
 }
+    @if (isSubmitted)
+    {
+        <div style="position: absolute;
+         position: absolute;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         left: 46%;
+         top: 100px;
+         width: 190px;
+         height: 45px;
+         background-color: green;
+         color:  white;
+         font-weight: bold">
+            
+          <span>   Team was submitted! :) </span>
+        </div> 
+    }
+
+<EditForm Model="TeamRequest" OnSubmit="Submit">
+    
+    <label> Team Name</label>
+    <InputText @bind-Value="TeamRequest.Name"> </InputText>
+    <label> TeamLeadId</label>
+    <InputText @bind-Value="TeamRequest.TeamLeadId"> </InputText>
+    <label> Descriere </label>
+    <InputText @bind-Value="TeamRequest.Descriptions"> </InputText>
+
+    <button type="submit"> Save </button>
+    
+
+</EditForm>
+
+

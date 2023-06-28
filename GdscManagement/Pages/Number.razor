@@ -1,5 +1,25 @@
-﻿<h3>Number</h3>
+﻿
+
+<div>
+currentCount @count
+
+<button @onclick=" DecrementCount" > Remove </button>
+   
+    
+</div>
 
 @code {
     
+    [Parameter]  @* input primit de la parinte al componentei*@
+    public int count { get; set; }
+    
+    [Parameter]
+    public EventCallback<int> countChanged { get; set; }
+
+
+    public async  void DecrementCount()
+    {
+        count--;
+      await countChanged.InvokeAsync(count);
+    }
 }
