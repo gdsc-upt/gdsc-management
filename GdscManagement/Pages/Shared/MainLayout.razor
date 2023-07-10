@@ -8,25 +8,26 @@
 <MudBreakpointProvider/>
 
 <MudLayout>
-    <AuthorizeView>
-        <Authorized>
-            @code {
-                private Drawer? _drawer;
-            }
+    @* <AuthorizeView> *@
+    @*     <Authorized> *@
+    @*         @code { *@
+    @*             private Drawer? _drawer; *@
+    @*         } *@
+    @* *@
+    @*         <AppBar ToggleDrawer="() => _drawer?.ToggleDrawer()"></AppBar> *@
+    @* *@
+    @*         <Drawer @ref="_drawer"/> *@
+    @* *@
+    @*         <MudMainContent> *@
+    @*             <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="mb-8 pt-8" Style="height: 92vh"> *@
+    @*                 @Body *@
+    @*             </MudContainer> *@
+    @*         </MudMainContent> *@
+    @*     </Authorized> *@
 
-            <AppBar ToggleDrawer="() => _drawer?.ToggleDrawer()"></AppBar>
-
-            <Drawer @ref="_drawer"/>
-
-            <MudMainContent>
-                <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="mb-8 pt-8" Style="height: 92vh">
-                    @Body
-                </MudContainer>
-            </MudMainContent>
-        </Authorized>
-
-        <NotAuthorized>
-            <LoginView></LoginView>
-        </NotAuthorized>
-    </AuthorizeView>
+    <NotAuthorized>
+        @Body
+        @* <LoginView></LoginView> *@
+    </NotAuthorized>
+    @* </AuthorizeView> *@
 </MudLayout>

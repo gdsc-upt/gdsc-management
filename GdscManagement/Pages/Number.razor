@@ -1,0 +1,19 @@
+<div>
+    Current count: @Count
+
+    <button @onclick="DecrementCount">Remove</button>
+</div>
+
+@code {
+    [Parameter]
+    public int Count { get; set; }
+
+    [Parameter]
+    public EventCallback<int> CountChanged { get; set; }
+
+    public async void DecrementCount()
+    {
+        Count--;
+        await CountChanged.InvokeAsync(Count);
+    }
+}

@@ -1,0 +1,100 @@
+@page "/Counter"
+@using GdscManagement.API.Features.Teams.Models
+@using GdscManagement.Common.Features.Teams.Models
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Common.Repository
+@using AutoMapper
+@inject IRepository<Team> TeamRepository
+@inject IRepository<User> UserRepository
+@inject IMapper Mapper
+
+@code
+{
+    public int x = 5;
+
+    public void Add()
+    {
+        x += 1;
+    }
+
+    public void LogWhenChanged(int count)
+    {
+        Console.WriteLine("Count changed to " + count);
+        x = count;
+    }
+}
+
+<div style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 50vh;
+      justify-content: center
+">
+    <h3>Counter</h3>
+
+    <Number @bind-Count="x"></Number>
+    <Number Count="x" CountChanged="count => x = count"></Number>
+    <Number Count="x" CountChanged="LogWhenChanged"></Number>
+
+    <button @onclick="Add">Add</button>
+</div>
+
+@code {
+
+    public TeamRequest TeamRequest { get; set; } = new();
+    public bool IsSubmitted = false;
+
+    public async void Submit()
+    {
+        var teamLead = await UserRepository.GetAsync(TeamRequest.TeamLeadId);
+        var team = Mapper.Map<Team>(TeamRequest);
+        team.TeamLead = teamLead;
+
+        await TeamRepository.AddAsync(team);
+
+        IsSubmitted = true;
+        await Task.Delay(2000);
+        IsSubmitted = false;
+        StateHasChanged();
+    }
+}
+
+@if (IsSubmitted)
+{
+    <div style="
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 39%;
+    top: 30px;
+
+    width: 300px;
+    height: 50px;
+
+    background-color: green;
+    color: white;
+    font-weight: bold;
+">
+        <span>
+            Team was submitted!
+        </span>
+    </div>
+}
+
+<div style="background-color: gray; display: flex; flex-direction: column; align-items: center; justify-content: center">
+    <EditForm Model="TeamRequest" OnSubmit="Submit">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center">
+            <label>Team name</label>
+            <InputText DisplayName="Team name" @bind-Value="TeamRequest.Name"></InputText>
+            <label>Team lead id</label>
+            @* <InputSelect TValue="User" @bind-Value="TeamLead" ></InputSelect> *@
+            <InputText DisplayName="Team lead id" @bind-Value="TeamRequest.TeamLeadId"></InputText>
+             <label>Description</label>
+            <InputText DisplayName="Description" @bind-Value="TeamRequest.Descriptions"></InputText>
+
+        <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit" Variant="Variant.Filled">Submit</MudButton>
+        </div>
+    </EditForm>
+</div>
