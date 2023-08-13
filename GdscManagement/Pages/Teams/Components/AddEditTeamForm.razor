@@ -1,6 +1,9 @@
 @inject ISnackbar Snackbar
+@using Microsoft.EntityFrameworkCore
 @using GdscManagement.Utilities.Extensions
+@using Microsoft.AspNetCore.Identity
 @using GdscManagement.Common.Features.Teams.Models
+@using GdscManagement.Common.Features.Users.Models
 @using GdscManagement.Common.Repository
 @using GdscManagement.Features.Teams
 @using GdscManagement.Pages.Shared
@@ -9,6 +12,7 @@
 @inject ViewModelHelper<TeamViewModel> Helper
 @inject IBaseRepository<Team> BaseRepository
 @inject IRepository<Team> TeamRepository
+@inject UserManager<User> UserRepository
 
 <span id="@(IsEdit ? "edit" : "add")"></span>
 
@@ -28,6 +32,18 @@
 
                         <FieldBuilder Property="property" ViewModel="_viewModel"/>
                     }
+                    <MudSelect @bind-Value="teamlead" T="User" Label="User" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter">
+
+
+                        @* Change teamlead *@
+                        @foreach (var user in _users)
+                        {
+                            <MudSelectItem Value="@user"/>
+                        }
+
+
+
+                    </MudSelect>
                 </MudCardContent>
 
                 <MudCardActions>
@@ -75,6 +91,21 @@
     TeamViewModel _viewModel = new();
     bool IsEdit => Model is not null;
 
+    List<User> _users = new();
+
+    User teamlead = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = await UserManager.Users.ToListAsync();
+        if (IsEdit)
+        {
+            teamlead = _users.FirstOrDefault(u => Model.TeamLeadId == u.Id);
+        }
+    }
+
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -109,6 +140,8 @@
             property.SetValue(original, property.GetValue(edited));
         }
 
+
+        original.TeamLeadId = teamlead.Id;
         return await TeamRepository.UpdateAsync(original);
     }
 
