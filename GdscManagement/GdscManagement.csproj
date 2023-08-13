@@ -61,8 +61,4 @@
       <AdditionalFiles Include="Pages\Shared\UserSettings.razor" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages\Teams\Components\" />
-    </ItemGroup>
-
 </Project>

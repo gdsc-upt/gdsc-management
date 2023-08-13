@@ -1,8 +1,12 @@
-﻿@using GdscManagement.Common.Repository
-@using GdscManagement.Common.Features.Teams.Models
+﻿@using GdscManagement.Common.Features.Teams.Models
+@using GdscManagement.Common.Features.Users.Models
+@using GdscManagement.Common.Repository
+@using GdscManagement.API.Features.Teams.Models
 @attribute [Route("/teams")]
-//ruta (endpoint in pagina)
 @inject IBaseRepository<Team> BaseRepository
+@inject IRepository<User> UserRepository
+@inject IRepository<Team> TeamRepository
+@inject NavigationManager Navigation
 
 <div> Teams: @_teams.Count</div>
 
@@ -13,7 +17,10 @@
 }
 
 
-<MudTable Items="@_teams" Hover="true" Breakpoint="Breakpoint.Sm">
+<MudTable
+    OnRowClick="Navigate"
+    T="ViewModel"
+    Items="@_teams" Hover="true" Breakpoint="Breakpoint.Sm">
     <ColGroup>
         <col style="width:300px;"/>
         <col style="width:100px;"/>
@@ -50,6 +57,13 @@
                         </MudCardHeader>
                         <MudCardContent Class="pa-0">
                             @context.Team.Name
+                            <MudButton OnClick="async () => { await TeamRepository.DeleteAsync(context.Team.Id);
+                            await ReloadTeams(); StateHasChanged(); }">
+                                Delete
+
+
+                            </MudButton>
+
                         </MudCardContent>
                     </MudCard>
                 </td>
@@ -60,6 +74,11 @@
 
 @code
 {
+    public void Navigate(TableRowClickEventArgs<ViewModel> tableRowClickEventArgs)
+    {
+        Navigation.NavigateTo($"/teams/{tableRowClickEventArgs.Item.Team.Id}");
+    }
+
     public class ViewModel
     {
         public Team Team { get; set; }
@@ -70,7 +89,6 @@
     {
         var tmpPerson = _teams.First(f => f.Team.Id == nr);
         tmpPerson.ShowDetails = !tmpPerson.ShowDetails;
-        
     }
 }
 
@@ -80,14 +98,96 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _teams = (await BaseRepository.GetAsync()).Select(t => new ViewModel() { Team = t, ShowDetails = false }).ToList();
+        await ReloadTeams();
 
         Console.WriteLine(_teams.Count()); //afisam lista de echipe(in consola)
         await base.OnInitializedAsync();
     }
 
-} 
+
+    protected async Task ReloadTeams()
+    {
+        _teams = (await BaseRepository.GetAsync()).Select(t => new ViewModel { Team = t, ShowDetails = false }).ToList();
+    }
+
+}
+
+@* ADD TEAM *@
+
+@code {
+
+    public TeamRequest TeamRequest { get; set; } = new();
+    public bool isSubmitted;
+
+    public async void Submit()
+    {
+        isSubmitted = true;
+        await Task.Delay(2000);
+        isSubmitted = false;
+        StateHasChanged();
+        @* return; pt testare, ca sa nu se salveze*@
+        @* ca sa dispara alerta dupa 2 secunde/ notifica componenta de blazor ca se modifica ceva *@
+
+        var teamLead = await UserRepository.GetAsync(TeamRequest.TeamLeadId);
+        var team = new Team
+        {
+            Name = TeamRequest.Name,
+            Descriptions = TeamRequest.Descriptions,
+            TeamLead = teamLead
+        };
+
+        await TeamRepository.AddAsync(team);
+
+
+        Console.WriteLine(TeamRequest.TeamLeadId);
+        Console.WriteLine(TeamRequest.Name);
+        Console.WriteLine(TeamRequest.Descriptions);
+    }
+
+
+
+}
+
+
+}
+@if (isSubmitted)
+{
+    <div style="position: absolute;
+         position: absolute;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         left: 46%;
+         top: 100px;
+         width: 190px;
+         height: 45px;
+         background-color: green;
+         color:  white;
+         font-weight: bold">
+
+        <span> Team was submitted! :) </span>
+    </div>
+}
+
+<EditForm Model="TeamRequest" OnSubmit="Submit">
+
+    <label> Team Name</label>
+    <InputText @bind-Value="TeamRequest.Name"> </InputText>
+    <label> TeamLeadId</label>
+    <InputText @bind-Value="TeamRequest.TeamLeadId"> </InputText>
+    <label> Descriere </label>
+    <InputText @bind-Value="TeamRequest.Descriptions"> </InputText>
+
+    <button type="submit"> Save </button>
+
+
+</EditForm>
+
+@* delete team*@
+
+@code{
 
 
 
 
+}

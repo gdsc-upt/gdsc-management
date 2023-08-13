@@ -1,5 +1,138 @@
-﻿<h3>AddEditTeamForm</h3>
+@inject ISnackbar Snackbar
+@using GdscManagement.Utilities.Extensions
+@using GdscManagement.Common.Features.Teams.Models
+@using GdscManagement.Common.Repository
+@using GdscManagement.Features.Teams
+@using GdscManagement.Pages.Shared
+@using GdscManagement.Utilities
+@inherits GdscManagement.Pages.Shared.BaseComponent<Team, TeamViewModel>
+@inject ViewModelHelper<TeamViewModel> Helper
+@inject IBaseRepository<Team> BaseRepository
+@inject IRepository<Team> TeamRepository
+
+<span id="@(IsEdit ? "edit" : "add")"></span>
+
+<EditForm Model="@_viewModel" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator/>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    @foreach (var property in _viewModel.GetType().GetProperties())
+                    {
+                        var isReadonly = property.GetExtrasInfo().ReadOnly;
+                        if (property.IsHidden() || (isReadonly && !IsEdit))
+                        {
+                            continue;
+                        }
+
+                        <FieldBuilder Property="property" ViewModel="_viewModel"/>
+                    }
+                </MudCardContent>
+
+                <MudCardActions>
+                    <MudButton
+                        Variant="Variant.Outlined"
+                        Color="Color.Primary"
+                        StartIcon="fa-solid fa-circle-left"
+                        IconColor="Color.Primary"
+                        Class="ml-auto"
+                        OnClick="GoBack">
+                        Back
+                    </MudButton>
+
+                    <MudSpacer></MudSpacer>
+
+                    <MudButton
+                        ButtonType="ButtonType.Submit"
+                        Variant="Variant.Filled"
+                        StartIcon="fa-solid fa-circle-check"
+                        IconColor="Color.Surface"
+                        Color="Color.Success"
+                        Class="ml-auto">
+                        @(IsEdit ? "Update" : "Add")
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                Fill out the form correctly to see the success message.
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</EditForm>
 
 @code {
-    
+
+    [Parameter]
+    public Team? Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    TeamViewModel _viewModel = new();
+    bool IsEdit => Model is not null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _viewModel = Model is null ? _viewModel : Map(Model);
+    }
+
+    async Task<Team> AddExample()
+    {
+        if (Model is null) return await TeamRepository.AddAsync(Map(_viewModel));
+        Snackbar.Add("Something went wrong, there's and existing Model", Severity.Error);
+        return null;
+    }
+
+    async Task<Team?> EditExample()
+    {
+        if (Model?.Id is null)
+        {
+            Snackbar.Add("Something went wrong, Model is null", Severity.Error);
+            return null;
+        }
+
+        var original = await TeamRepository.GetAsync(Model.Id);
+        if (original is null)
+        {
+            Snackbar.Add("Something went wrong, Model is null", Severity.Error);
+            return null;
+        }
+
+        var edited = Map(_viewModel);
+        foreach (var property in edited.GetType().GetProperties())
+        {
+            property.SetValue(original, property.GetValue(edited));
+        }
+
+        return await TeamRepository.UpdateAsync(original);
+    }
+
+    void GoBack()
+    {
+        Navigation.NavigateTo(TeamRoutes.Main);
+    }
+
+    async Task OnSubmit()
+    {
+        var result = IsEdit ? await EditExample() : await AddExample();
+        if (result == null)
+        {
+            Snackbar.Add("nu merge", Severity.Error);
+            return;
+        }
+
+        StateHasChanged();
+        var message = IsEdit ? "Team updated successfully" : "Team added successfully";
+        Snackbar.Add(message, Severity.Success);
+
+        await OnValidSubmit.InvokeAsync();
+        _viewModel = new TeamViewModel();
+        GoBack();
+    }
+
 }
